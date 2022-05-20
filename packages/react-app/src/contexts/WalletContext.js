@@ -64,13 +64,19 @@ export const WalletContextProvider = ({ children }) => {
   const yourTCBalance = toucanCertsBalance && toucanCertsBalance.toNumber && toucanCertsBalance.toNumber()
 
   useEffect(() => {
+    const backup = { 'wrapped-bitcoin':{ 'usd':30257 },'weth':{ 'usd':2027.75 },'toucan-protocol-nature-carbon-tonne':{ 'usd':4.94 },'defipulse-index':{ 'usd':97.93 },'klima-dao':{ 'usd':6.54 },'staked-klima':{ 'usd':7.97 },'moss-carbon-credit':{ 'usd':6.82 },'toucan-protocol-base-carbon-tonne':{ 'usd':2.55 } }
     const getData = async () => {
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=defipulse-index,weth,wrapped-bitcoin,toucan-protocol-base-carbon-tonne,toucan-protocol-nature-carbon-tonne,moss-carbon-credit,klima-dao,staked-klima&vs_currencies=usd',
-      )
-      const data = await response.json()
+      try {
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=defipulse-index,weth,wrapped-bitcoin,toucan-protocol-base-carbon-tonne,toucan-protocol-nature-carbon-tonne,moss-carbon-credit,klima-dao,staked-klima&vs_currencies=usd',
+        )
+        const data = await response.json()
 
-      setUSDPrices(data)
+        setUSDPrices(data)
+      } catch(e) {
+        setUSDPrices(backup)
+        console.log('Error while trying to get CoinGecko Prices: ',e)
+      }
     }
 
     getData()
