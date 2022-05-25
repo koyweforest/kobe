@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'

@@ -46,6 +46,10 @@ export const WalletContextProvider = ({ children }) => {
 
   const polygonWethBalance = useContractReader(polygonContracts, 'WETH', 'balanceOf', [address], HOOK_OPTIONS)
 
+  const polygonUBOBalance = useContractReader(polygonContracts, 'UBO', 'balanceOf', [address], HOOK_OPTIONS)
+
+  const polygonNBOBalance = useContractReader(polygonContracts, 'NBO', 'balanceOf', [address], HOOK_OPTIONS)
+
   const polygonCNBEDBalance = useContractReader(polygonContracts, 'CNBED', 'balanceOf', [address], HOOK_OPTIONS)
 
   const polygonCBTCBalance = useContractReader(polygonContracts, 'CBTC', 'balanceOf', [address], HOOK_OPTIONS)
@@ -93,6 +97,8 @@ export const WalletContextProvider = ({ children }) => {
       polygonWethBalance,
       polygonCNBEDBalance,
       polygonCBTCBalance,
+      polygonUBOBalance,
+      polygonNBOBalance,
     },
     yourKTBalance,
     yourETBalance,

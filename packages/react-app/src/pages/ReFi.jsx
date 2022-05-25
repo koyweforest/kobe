@@ -25,7 +25,7 @@ const ReFi = () => {
   ReactGA.send('pageview')
 
   const { contracts, USDPrices, walletBalance, isPledged, isLoadingBalances, writeContracts } = useContext(WalletContext)
-  const { polygonMCO2Balance, polygonBCTBalance, polygonNCTBalance, polygonKlimaBalance, polygonSKlimaBalance, polygonCNBEDBalance, polygonCBTCBalance, polygonWethBalance, polygonContracts  } = walletBalance
+  const { polygonMCO2Balance, polygonBCTBalance, polygonNCTBalance, polygonKlimaBalance, polygonSKlimaBalance, polygonCNBEDBalance, polygonCBTCBalance, polygonWethBalance  } = walletBalance
   const { address, isLoadingAccount, injectedProvider, userSigner } = useContext(NetworkContext)
   const { setObject, indexContextDetails, indexUSDPrices } = useContext(IndexContext)
 
