@@ -13,26 +13,17 @@ const MyToucanPositions = ({ handleModalUp }) => {
   const [showAll, setShowAll] = useState(false)
   const { USDPrices, walletBalance } = useContext(WalletContext)
   const { indexUSDPrices } = useContext(IndexContext)
-  const {
-    polygonBCTBalance: BTC,
-    polygonMCO2Balance: MCO2,
-    polygonNCTBalance: NCT,
-    polygonKlimaBalance: KLIMA,
-    polygonSKlimaBalance: sKLIMA,
-    polygonCNBEDBalance: CNBED,
-    polygonCBTCBalance: CBTC,
-  } = walletBalance
   const [tableData, setTableData] = React.useState([])
 
 
 
   useEffect(() => {
-    if (USDPrices && BTC && MCO2 && NCT && KLIMA && sKLIMA && CNBED && CBTC) {
-      const tableData = createTableData(USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED, CBTC, indexUSDPrices)
+    if (USDPrices && walletBalance && indexUSDPrices) {
+      const tableData = createTableData(USDPrices, walletBalance, indexUSDPrices)
 
       setTableData(tableData)
     }
-  }, [USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED, CBTC, indexUSDPrices])
+  }, [USDPrices, walletBalance, indexUSDPrices])
 
   return (
     <>

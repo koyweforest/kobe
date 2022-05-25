@@ -11,6 +11,7 @@ import KoyweTrees from '../components/RegenArt/KoyweTrees'
 import NftCard from '../components/RegenArt/NftCard'
 import NftCardEnt from '../components/RegenArt/NftCardEnt'
 import NftCardTreejer from '../components/RegenArt/NftCardTreejer'
+import NftCardTreejerGenesis from '../components/RegenArt/NftCardTreejerGenesis'
 import { HOOK_OPTIONS } from '../constants'
 import { NetworkContext } from '../contexts/NetworkContext'
 import { WalletContext } from '../contexts/WalletContext'
@@ -18,6 +19,7 @@ import { Transactor } from '../helpers'
 import { useTreejerGraph } from '../hooks/useTreejerGraph'
 
 const { Title, Text } = Typography
+const { utils, BigNumber } = require('ethers')
 
 const RegenArt = () => {
   ReactGA.initialize('G-L9J2W0LSQS')
@@ -27,14 +29,19 @@ const RegenArt = () => {
   const { contracts, writeContracts, yourKTBalance, yourETBalance } = useContext(WalletContext)
   const [isBCTAmountApproved, setIsBCTAmountApproved] = useState()
   const [isDAIAmountApproved, setIsDAIAmountApproved] = useState()
+  const [isDAIAmountApprovedGenesis, setIsDAIAmountApprovedGenesis] = useState()
   const [buying, setBuying] = useState()
   const [buyingEnt, setBuyingEnt] = useState()
   const [buyingTreejer, setBuyingTreejer] = useState()
+  const [buyingTreejerGenesis, setBuyingTreejerGenesis] = useState()
   const [approvingBCT, setApprovingBCT] = useState()
   const [approvingDAI, setApprovingDAI] = useState()
+  const [approvingWETHGenesis, setApprovingWETHGenesis] = useState()
+  const [treejerGenesisPrice, setTreejerGenesisPrice] = useState()
   const { collection: artGallery, isLoading } = useTreejerGraph(address)
   const treeAddress = contracts?.KoyweCollectibles?.address
   const treejerAddress = contracts?.TREEJER?.address
+  const treejerAddressGenesis = contracts?.TREEJERGENESIS?.address
 
   const mintPrice = useContractReader(contracts, 'KoyweCollectibles', 'bctPrice', HOOK_OPTIONS)
   const isOpen = useContractReader(contracts, 'KoyweCollectibles', 'mintOpen', HOOK_OPTIONS)
@@ -43,9 +50,13 @@ const RegenArt = () => {
   const isEntOpen = useContractReader(contracts, 'ENT', 'saleIsActive', HOOK_OPTIONS)
 
   const mintPriceTreejer = useContractReader(contracts, 'TREEJER', 'price', HOOK_OPTIONS)
+  // const mintPriceTreejerGenesis = 0
+  const treejerGenesisSaleData = useContractReader(contracts, 'TREEJERGENESIS', 'incrementalSaleData', HOOK_OPTIONS)
+  const treejerGenenesisLast = useContractReader(contracts, 'TREEJERGENESIS', 'lastSold', HOOK_OPTIONS)
 
   const vendorApproval = useContractReader(contracts, 'BCT', 'allowance', [address, treeAddress], HOOK_OPTIONS)
   const vendorApprovalDAI = useContractReader(contracts, 'DAI', 'allowance', [address, treejerAddress], HOOK_OPTIONS)
+  const genesisApprovalWETH = useContractReader(contracts, 'WETH', 'allowance', [address, treejerAddressGenesis], HOOK_OPTIONS)
 
   const gasPrice = useGasPrice(targetNetwork, 'fast')
   const tx = Transactor(userSigner, gasPrice)
@@ -60,6 +71,12 @@ const RegenArt = () => {
     setApprovingDAI(true)
     await tx(writeContracts.DAI.approve(contracts.TREEJER.address, mintPriceTreejer))
     setApprovingDAI(false)
+  }
+
+  const handleApproveWETHGenesis = async () => {
+    setApprovingWETHGenesis(true)
+    treejerGenesisPrice && await tx(writeContracts.WETH.approve(contracts.TREEJERGENESIS.address, treejerGenesisPrice))
+    setApprovingWETHGenesis(false)
   }
 
   const handleMint = async () => {
@@ -80,6 +97,12 @@ const RegenArt = () => {
     setBuyingTreejer(false)
   }
 
+  const handleMintTreejerGenesis = async () => {
+    setBuyingTreejerGenesis(true)
+    await tx(writeContracts.TREEJERGENESIS.fundTree(1, '0x4218A70C7197CA24e171d5aB71Add06a48185f6a', address))
+    setBuyingTreejerGenesis(false)
+  }
+
   useEffect(() => {
     if (vendorApproval && mintPrice) setIsBCTAmountApproved(vendorApproval.gte(mintPrice))
   }, [mintPrice, vendorApproval])
@@ -87,6 +110,23 @@ const RegenArt = () => {
   useEffect(() => {
     if (vendorApprovalDAI && mintPriceTreejer) setIsDAIAmountApproved(vendorApprovalDAI.gte(mintPriceTreejer))
   }, [mintPriceTreejer, vendorApprovalDAI])
+
+  useEffect(() => {
+    if (genesisApprovalWETH && treejerGenesisPrice) setIsDAIAmountApprovedGenesis(genesisApprovalWETH.gte(treejerGenesisPrice))
+  }, [treejerGenesisPrice, genesisApprovalWETH])
+
+  useEffect(() => {
+    const _treejerGenesisPrice = treejerGenenesisLast && treejerGenesisSaleData &&
+    treejerGenesisSaleData.initialPrice.add(
+      (
+        treejerGenenesisLast.sub(treejerGenesisSaleData.startTreeId)
+      ) .div(treejerGenesisSaleData.increments)
+        .mul(treejerGenesisSaleData.initialPrice)
+        .mul(treejerGenesisSaleData.priceJump)
+        .div(BigNumber.from(10000)))
+
+    setTreejerGenesisPrice(_treejerGenesisPrice)
+  }, [treejerGenenesisLast, treejerGenesisSaleData])
 
   return (
     <Row className="flex-center">
@@ -113,6 +153,18 @@ const RegenArt = () => {
               address={address}
               buyingEnt={buyingEnt}
               handleMintEnt={handleMintEnt}
+            />
+          </Space>
+          <Space direction="vertical" style={{ marginTop: '1rem', width: '100%' }}>
+            <NftCardTreejerGenesis
+              title="Treejer Protocol Genesis"
+              mintPrice={treejerGenesisPrice}
+              address={address}
+              isTokenAmountApproved={isDAIAmountApprovedGenesis}
+              buying={buyingTreejerGenesis}
+              handleApproveToken={handleApproveWETHGenesis}
+              handleMint={handleMintTreejerGenesis}
+              approving={approvingWETHGenesis}
             />
           </Space>
           <Space direction="vertical" style={{ marginTop: '1rem', width: '100%' }}>

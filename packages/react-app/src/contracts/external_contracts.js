@@ -1914,6 +1914,52 @@ const treejerAbi = [
     'stateMutability': 'view',
     'type': 'function',
   },
+  {
+    'inputs': [],
+    'name': 'incrementalSaleData',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': 'startTreeId',
+        'type': 'uint256',
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'endTreeId',
+        'type': 'uint256',
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'initialPrice',
+        'type': 'uint256',
+      },
+      {
+        'internalType': 'uint64',
+        'name': 'increments',
+        'type': 'uint64',
+      },
+      {
+        'internalType': 'uint64',
+        'name': 'priceJump',
+        'type': 'uint64',
+      },
+    ],
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'inputs': [],
+    'name': 'lastSold',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256',
+      },
+    ],
+    'stateMutability': 'view',
+    'type': 'function',
+  },
 ]
 
 const SETABI = [
@@ -3627,6 +3673,18 @@ module.exports = {
       TOUCANCERTS: {
         address: '0x5e377f16E4ec6001652befD737341a28889Af002',
         abi: TOUCANCERTSABI,
+      },
+      UBO: {
+        address: '0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
+        abi: ERC20ABI,
+      },
+      NBO: {
+        address: '0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
+        abi: ERC20ABI,
+      },
+      TREEJERGENESIS: {
+        address: '0x288917a9ef50D74AFe2C73390EF6A5a92eFcf8D2',
+        abi: treejerAbi,
       },
     },
   },

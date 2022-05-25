@@ -2,15 +2,29 @@
 const { utils } = require('ethers')
 
 // eslint-disable-next-line max-params
-export const createTableData = (USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED, CBTC, indexUSDPrices) => {
+export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
 
-  const MCO2formated = utils.formatUnits(MCO2, 18)
-  const BTCformated = utils.formatUnits(BTC, 18)
-  const NCTformated = utils.formatUnits(NCT, 18)
-  const KLIMAformated = utils.formatUnits(KLIMA, 9)
-  const sKLIMAformated = utils.formatUnits(sKLIMA, 9)
-  const CNBEDformated = utils.formatUnits(CNBED, 18)
-  const CBTCformated = utils.formatUnits(CBTC, 18)
+  const {
+    polygonBCTBalance: BCT,
+    polygonMCO2Balance: MCO2,
+    polygonNCTBalance: NCT,
+    polygonKlimaBalance: KLIMA,
+    polygonSKlimaBalance: sKLIMA,
+    polygonCNBEDBalance: CNBED,
+    polygonCBTCBalance: CBTC,
+    polygonUBOBalance: UBO,
+    polygonNBOBalance: NBO,
+  } = walletBalance
+
+  const MCO2formated = utils.formatUnits(MCO2 || 0, 18)
+  const BTCformated = utils.formatUnits(BCT || 0, 18)
+  const NCTformated = utils.formatUnits(NCT || 0, 18)
+  const KLIMAformated = utils.formatUnits(KLIMA || 0, 9)
+  const sKLIMAformated = utils.formatUnits(sKLIMA || 0, 9)
+  const CNBEDformated = utils.formatUnits(CNBED || 0, 18)
+  const CBTCformated = utils.formatUnits(CBTC || 0, 18)
+  const UBOformated = utils.formatUnits(UBO || 0, 18)
+  const NBOformated = utils.formatUnits(NBO || 0, 18)
 
   const MCO2BalanceUSD = MCO2formated * USDPrices['moss-carbon-credit']?.usd || 0
   const BCTBalanceUSD = BTCformated * USDPrices['toucan-protocol-base-carbon-tonne']?.usd || 0
@@ -19,6 +33,8 @@ export const createTableData = (USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED,
   const sKLIMABalanceUSD = sKLIMAformated * USDPrices['staked-klima']?.usd || 0
   const CNBEDBalanceUSD = CNBEDformated * indexUSDPrices?.CNBED || 0
   const CBTCBalanceUSD = CBTCformated * indexUSDPrices?.CBTC || 0
+  const UBOBalanceUSD = UBOformated * USDPrices['universal-basic-tonne']?.usd || 0
+  const NBOBalanceUSD = NBOformated * USDPrices['nature-based-tonne']?.usd || 0
 
   const tableData = [
     {
@@ -97,7 +113,7 @@ export const createTableData = (USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED,
       },
       position: `$${BCTBalanceUSD.toFixed(2)}`,
       co2: Number(BTCformated).toFixed(2),
-      description: 'Base Carbon Ton: Toucan credits bridged to blockchain on Polygon. Each token represents the offset of 1 CO2e ton.',
+      description: 'Base Carbon Ton: Toucan credits bridged to blockchain on Polygon. Each token represents 1 CO2e ton.',
       contract: {
         title: '0x2F800Db0fdb5223b3C3f354886d907A671414A7F',
         url: 'https://polygonscan.com/address/0x2F800Db0fdb5223b3C3f354886d907A671414A7F',
@@ -119,7 +135,7 @@ export const createTableData = (USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED,
       },
       position: `$${NCTBalanceUSD.toFixed(2)}`,
       co2: Number(NCTformated).toFixed(2),
-      description: 'Nature Carbon Ton: Toucan premium credits bridged to blockchain on Polygon. Each token represents the offset of 1 CO2e ton.',
+      description: 'Nature Carbon Ton: Toucan premium credits bridged to blockchain on Polygon. Each token represents 1 CO2e ton.',
       contract: {
         title: '0xd838290e877e0188a4a44700463419ed96c16107',
         url: 'https://polygonscan.com/address/0xd838290e877e0188a4a44700463419ed96c16107',
@@ -133,6 +149,52 @@ export const createTableData = (USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED,
     },
     {
       key: '6',
+      token: {
+        meta: 'token',
+        title: 'Universal Basic Offset (UBO)',
+        icon: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c.jpg',
+        url: 'https://www.c3.app/',
+        symbol: 'UBO',
+      },
+      position: `$${KLIMABalanceUSD.toFixed(2)}`,
+      co2: Number(UBOformated).toFixed(2),
+      description: 'Universal Basic Offset, C3 widest criteria carbon token, accepting most VCS and GS methodologies for credits issued from 2014 onwards. Each token represents 1 CO2e ton.',
+      contract: {
+        title: '0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
+        url: 'https://polygonscan.com/address/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
+      },
+      buy: {
+        meta: 'token',
+        title: 'Get UBO',
+        url: 'https://app.sushi.com/en/swap?outputCurrency=0x2B3eCb0991AF0498ECE9135bcD04013d7993110c&chain=polygon',
+        symbol: 'UBO',
+      },
+    },
+    {
+      key: '7',
+      token: {
+        meta: 'token',
+        title: 'Nature Based Offset (NBO)',
+        icon: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48.jpg',
+        url: 'https://www.c3.app/',
+        symbol: 'NBO',
+      },
+      position: `$${KLIMABalanceUSD.toFixed(2)}`,
+      co2: Number(NBOformated).toFixed(2),
+      description: 'Nature Based Offset, C3 Nature-based offset index accepting all VCS and GS methodologies characterized as NCS. Each token represents 1 CO2e ton.',
+      contract: {
+        title: '0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
+        url: 'https://polygonscan.com/address/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
+      },
+      buy: {
+        meta: 'token',
+        title: 'Get NBO',
+        url: 'https://app.sushi.com/en/swap?outputCurrency=0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48&chain=polygon',
+        symbol: 'NBO',
+      },
+    },
+    {
+      key: '8',
       token: {
         meta: 'token',
         title: 'Klima Tokens (KLIMA)',
@@ -155,7 +217,7 @@ export const createTableData = (USDPrices, BTC, MCO2, NCT, KLIMA, sKLIMA, CNBED,
       },
     },
     {
-      key: '7',
+      key: '9',
       token: {
         title: 'Staked Klima (sKLIMA)',
         icon: 'icon/klima.svg',

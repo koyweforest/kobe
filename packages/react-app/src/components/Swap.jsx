@@ -2,8 +2,7 @@
 /* eslint-disable max-lines-per-function */
 import React, { useEffect, useState } from 'react'
 import { RetweetOutlined, SettingOutlined } from '@ant-design/icons'
-import { ChainId, Fetcher, Percent, Token, TokenAmount, Trade, WETH } from '@uniswap/sdk'
-import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import { Token } from '@uniswap/sdk'
 import {
   Button,
   Card,
@@ -29,14 +28,11 @@ const { Option } = Select
 const { Text } = Typography
 const qs = require('qs')
 
-// export const ROUTER_ADDRESS = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
 export const ROUTER_ADDRESS = '0xdef1c0ded9bec7f1a1670819833240f027b25eff'
 
 export const ZERO_EX_ADDRESS = '0xdef1c0ded9bec7f1a1670819833240f027b25eff'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
-let  notify = null
 
 const erc20Abi = [
   'function balanceOf(address owner) view returns (uint256)',
@@ -90,24 +86,20 @@ function Swap({ selectedProvider, tokenList, tx }) {
   const [settingsVisible, setSettingsVisible] = useState(false)
   const [swapModalVisible, setSwapModalVisible] = useState(false)
   const [rawPrice, setRawPrice] = useState()
-  const [zeroXError, setZeroXError] = useState()
 
-
-  // const [tokenList, setTokenList] = useState([])
   const [tokens, setTokens] = useState()
   const [invertPrice, setInvertPrice] = useState(false)
 
   const blockNumber = useBlockNumber(selectedProvider, 3000)
 
   const signer = selectedProvider.getSigner()
-  const routerContract = new ethers.Contract(ROUTER_ADDRESS, IUniswapV2Router02ABI, signer)
-
-  // const _tokenListUri = tokenListURI || 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
 
   const debouncedAmountIn = useDebounce(amountIn, 500)
   const debouncedAmountOut = useDebounce(amountOut, 500)
 
   const activeChainId = 137 // process.env.REACT_APP_NETWORK === 'kovan' ? ChainId.KOVAN : ChainId.MAINNET
+
+  let notify
 
   useEffect(() => {
     const getTokenList = () => {
@@ -149,7 +141,11 @@ function Swap({ selectedProvider, tokenList, tx }) {
           tokdata.validationErrors.forEach(error => {
             errorMsg+=` ${error.reason} |`
           })
-          setZeroXError(`ERROR: |${errorMsg}`)
+          setRawPrice()
+          notification.open({
+            message: '0x Error',
+            description: `Error: ${errorMsg}`,
+          })
         } else
           if (exact === 'in') {
             setAmountInMax()
@@ -160,10 +156,13 @@ function Swap({ selectedProvider, tokenList, tx }) {
             setAmountIn(Number(ethers.utils.formatUnits(tokdata.sellAmount,tokens[tokenIn].decimals)).toFixed(6))
             setRawPrice(Number(1/tokdata.price).toFixed(6))
           }
-
-          console.log(tokdata)
       } catch(e) {
         console.log('Error while trying to get a 0x quote: ',e)
+        setRawPrice()
+        notification.open({
+          message: 'Error',
+          description: `Error while trying to get a 0x quote.`,
+        })
       }
     }
   }
@@ -255,7 +254,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
       const tempContract = new ethers.Contract(tokens[tokenIn].address, erc20Abi, signer)
       const result = await makeCall('approve', tempContract, [ROUTER_ADDRESS, newAllowance])
 
-      console.log(result)
       setApproving(false)
       setApprovalNotification(result)
 
@@ -276,16 +274,11 @@ function Swap({ selectedProvider, tokenList, tx }) {
         ? ethers.utils.hexlify(ethers.utils.parseUnits(amountIn.toString(), tokens[tokenIn].decimals))
         : amountInMax.raw.toString()
 
-    console.log(approvalAmount)
-
     const approval = updateRouterAllowance(approvalAmount)
 
     notify = Notify(approval)
 
-    console.log(await approvalNotification, await approval)
-
     if (approval.hash)
-
         notification.open({
         message: 'Token transfer approved',
         description: `You can now swap up to ${amountIn} ${tokenIn}`,
@@ -294,9 +287,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
 
   const removeRouterAllowance = async () => {
     const approvalAmount = ethers.utils.hexlify(0)
-
-    console.log(approvalAmount)
-
     const removal = updateRouterAllowance(approvalAmount)
 
     if (removal)
@@ -327,8 +317,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
 
     if(slippageTolerance) _params.slippagePercentage = slippageTolerance
 
-    console.log(`https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(_params)}`)
-
     try{
       const response = await fetch(
         `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(_params)}`,
@@ -347,28 +335,13 @@ function Swap({ selectedProvider, tokenList, tx }) {
           description: `Error: ${errorMsg}`,
         })
       } else{
-        console.log(tokdata)
-
         const newTx = {
           to: ZERO_EX_ADDRESS,
           data: tokdata.data,
           value: ethers.BigNumber.from(tokdata.value),
           from: address,
         }
-
-
-
-        console.log(newTx)
-// https://polygon.api.0x.org/swap/v1/quote?buyToken=0x2F800Db0fdb5223b3C3f354886d907A671414A7F&sellToken=0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619&takerAddres=0x40f9bf922c23c43acdad71Ab4425280C0ffBD697&feeRecipient=0x4218A70C7197CA24e171d5aB71Add06a48185f6a&buyTokenPercentageFee=0.02&buyAmount=1000000000000000000
-
-        // const result = { hash:'hash' }
-
-         const result = await signer.sendTransaction(newTx, { gasPrice: utils.parseUnits(`${tokdata.gasPrice}`,9) }, { gasLimit: utils.parseUnits(`${tokdata.gas}`,9) })
-
-       // const result = await tx(newTx)
-
-        console.log(result)
-
+        const result = await signer.sendTransaction(newTx, { gasPrice: utils.parseUnits(`${tokdata.gasPrice}`,9) }, { gasLimit: utils.parseUnits(`${tokdata.gas}`,9) })
 
         notification.open({
           message: 'Swap complete 🌳',
@@ -433,20 +406,9 @@ function Swap({ selectedProvider, tokenList, tx }) {
         })[0]
       : null
 
-  const cleanIpfsURI = uri => {
-    try {
-      return uri.replace('ipfs://', 'https://ipfs.io/ipfs/')
-    } catch (e) {
-      console.log(e, uri)
-
-      return uri
-    }
-  }
-
   const logoIn = metaIn ? metaIn.logoURI : 'https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/matic.svg'
-  const logoOut = metaOut ? metaOut.logoURI : null
+  const logoOut = metaOut ? metaOut.logoURI : 'https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/matic.svg'
 
-  // const rawPrice = trades && trades[0] ? trades[0].executionPrice : null
   const price = rawPrice ? rawPrice : null
   const priceDescription = rawPrice
     ? invertPrice
@@ -585,10 +547,7 @@ function Swap({ selectedProvider, tokenList, tx }) {
               bordered={false}
               defaultValue={defaultToken}
               onChange={value => {
-                console.log(value)
-
                 if (value === tokenOut) {
-                  console.log('switch!', tokenIn)
                   setTokenOut(tokenIn)
                   setAmountOut(amountIn)
                   setBalanceOut(balanceIn)
@@ -647,10 +606,7 @@ function Swap({ selectedProvider, tokenList, tx }) {
               size="large"
               bordered={false}
               onChange={value => {
-                console.log(value, tokenIn, tokenOut)
-
                 if (value === tokenIn) {
-                  console.log('switch!', tokenOut)
                   setTokenIn(tokenOut)
                   setAmountIn(amountOut)
                   setBalanceIn(balanceOut)
@@ -729,10 +685,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
               formatter={value => `${value}%`}
               parser={value => value.replace('%', '')}
               onChange={value => {
-                console.log(value)
-
-                // const slippagePercent = new Percent(Math.round(value * 100).toString(), '10000')
-
                 setSlippageTolerance(value)
               }}
             />
@@ -745,7 +697,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
               max={3600}
               defaultValue={defaultTimeLimit}
               onChange={value => {
-                console.log(value)
                 setTimeLimit(value)
               }}
             />
