@@ -50,13 +50,13 @@ export default function SwapModal({ writeContracts, contracts, tx, modalUp, hand
     'UBO' : {
       address: '0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
       symbol: 'UBO',
-      description: 'Universal Basic Offset, C3&amp;s widest criteria carbon token, accepting most VCS and GS methodologies for credits issued from 2014 onwards. Each token represents 1 CO2e ton.',
+      description: 'Universal Basic Offset, C3&apos;s widest criteria carbon token, accepting most VCS and GS methodologies for credits issued from 2014 onwards. Each token represents 1 CO2e ton.',
       tokensetsURL: 'https://www.c3.app/',
     },
     'NBO' : {
       address: '0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
       symbol: 'NBO',
-      description: 'Nature Based Offset, C3&amp;s Nature-based offset index accepting all VCS and GS methodologies characterized as NCS. Each token represents 1 CO2e ton.',
+      description: 'Nature Based Offset, C3&apos;s Nature-based offset index accepting all VCS and GS methodologies characterized as NCS. Each token represents 1 CO2e ton.',
       tokensetsURL: 'https://www.c3.app/',
     },
   }
