@@ -36,6 +36,24 @@ export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
   const UBOBalanceUSD = UBOformated * USDPrices['universal-basic-tonne']?.usd || 0
   const NBOBalanceUSD = NBOformated * USDPrices['nature-based-tonne']?.usd || 0
 
+  // ADD THESE OBJECTS (AND UNCOMMENT TOKENS HERE) TO TOKEN LIST ONCE THE TIME IS RIGHT
+  // {
+  //   "name": "Nature Based Offset",
+  //   "address": "0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48",
+  //   "chainId": 137,
+  //   "decimals": 18,
+  //   "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48.jpg",
+  //   "symbol": "NBO"
+  // },
+  // {
+  //   "address": "0x2B3eCb0991AF0498ECE9135bcD04013d7993110c",
+  //   "chainId": 137,
+  //   "decimals": 18,
+  //   "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c.jpg",
+  //   "name": "Universal Basic Offset",
+  //   "symbol": "UBO"
+  // }
+
   const tableData = [
     {
       key: '1',
@@ -151,52 +169,6 @@ export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
       key: '6',
       token: {
         meta: 'token',
-        title: 'Universal Basic Offset (UBO)',
-        icon: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c.jpg',
-        url: 'https://www.c3.app/',
-        symbol: 'UBO',
-      },
-      position: `$${KLIMABalanceUSD.toFixed(2)}`,
-      co2: Number(UBOformated).toFixed(2),
-      description: 'Universal Basic Offset, C3 widest criteria carbon token, accepting most VCS and GS methodologies for credits issued from 2014 onwards. Each token represents 1 CO2e ton.',
-      contract: {
-        title: '0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
-        url: 'https://polygonscan.com/address/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
-      },
-      buy: {
-        meta: 'token',
-        title: 'Get UBO',
-        url: 'https://app.sushi.com/en/swap?outputCurrency=0x2B3eCb0991AF0498ECE9135bcD04013d7993110c&chain=polygon',
-        symbol: 'UBO',
-      },
-    },
-    {
-      key: '7',
-      token: {
-        meta: 'token',
-        title: 'Nature Based Offset (NBO)',
-        icon: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48.jpg',
-        url: 'https://www.c3.app/',
-        symbol: 'NBO',
-      },
-      position: `$${KLIMABalanceUSD.toFixed(2)}`,
-      co2: Number(NBOformated).toFixed(2),
-      description: 'Nature Based Offset, C3 Nature-based offset index accepting all VCS and GS methodologies characterized as NCS. Each token represents 1 CO2e ton.',
-      contract: {
-        title: '0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
-        url: 'https://polygonscan.com/address/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
-      },
-      buy: {
-        meta: 'token',
-        title: 'Get NBO',
-        url: 'https://app.sushi.com/en/swap?outputCurrency=0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48&chain=polygon',
-        symbol: 'NBO',
-      },
-    },
-    {
-      key: '8',
-      token: {
-        meta: 'token',
         title: 'Klima Tokens (KLIMA)',
         icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0x4e78011Ce80ee02d2c3e649Fb657E45898257815/logo.png',
         url: 'https://www.klimadao.finance/',
@@ -217,7 +189,7 @@ export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
       },
     },
     {
-      key: '9',
+      key: '7',
       token: {
         title: 'Staked Klima (sKLIMA)',
         icon: 'icon/klima.svg',
@@ -237,6 +209,52 @@ export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
         symbol: 'sKLIMA',
       },
     },
+    // {
+    //   key: '8',
+    //   token: {
+    //     meta: 'token',
+    //     title: 'Universal Basic Offset (UBO)',
+    //     icon: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c.jpg',
+    //     url: 'https://www.c3.app/',
+    //     symbol: 'UBO',
+    //   },
+    //   position: `$${KLIMABalanceUSD.toFixed(2)}`,
+    //   co2: Number(UBOformated).toFixed(2),
+    //   description: 'Universal Basic Offset, C3 widest criteria carbon token, accepting most VCS and GS methodologies for credits issued from 2014 onwards. Each token represents 1 CO2e ton.',
+    //   contract: {
+    //     title: '0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
+    //     url: 'https://polygonscan.com/address/0x2B3eCb0991AF0498ECE9135bcD04013d7993110c',
+    //   },
+    //   buy: {
+    //     meta: 'token',
+    //     title: 'Get UBO',
+    //     url: 'https://app.sushi.com/en/swap?outputCurrency=0x2B3eCb0991AF0498ECE9135bcD04013d7993110c&chain=polygon',
+    //     symbol: 'UBO',
+    //   },
+    // },
+    // {
+    //   key: '9',
+    //   token: {
+    //     meta: 'token',
+    //     title: 'Nature Based Offset (NBO)',
+    //     icon: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/polygon/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48.jpg',
+    //     url: 'https://www.c3.app/',
+    //     symbol: 'NBO',
+    //   },
+    //   position: `$${KLIMABalanceUSD.toFixed(2)}`,
+    //   co2: Number(NBOformated).toFixed(2),
+    //   description: 'Nature Based Offset, C3 Nature-based offset index accepting all VCS and GS methodologies characterized as NCS. Each token represents 1 CO2e ton.',
+    //   contract: {
+    //     title: '0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
+    //     url: 'https://polygonscan.com/address/0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48',
+    //   },
+    //   buy: {
+    //     meta: 'token',
+    //     title: 'Get NBO',
+    //     url: 'https://app.sushi.com/en/swap?outputCurrency=0x6BCa3B77C1909Ce1a4Ba1A20d1103bDe8d222E48&chain=polygon',
+    //     symbol: 'NBO',
+    //   },
+    // },
   ]
 
   return tableData
