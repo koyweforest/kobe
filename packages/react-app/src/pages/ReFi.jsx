@@ -102,6 +102,7 @@ return (
       <Swap
         selectedProvider={injectedProvider}
         tokenList={tokenList}
+        linkTokenOut={''}
       />
       }
       {!isLoadingAccount && address && writeContracts && contracts && swapping &&

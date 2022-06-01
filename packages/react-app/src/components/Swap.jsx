@@ -55,7 +55,6 @@ const makeCall = async (callName, contract, args, metadata = {}) => {
 }
 
 const defaultToken = 'WETH'
-const defaultTokenOut = 'NCT'
 const defaultSlippage = '0.5'
 const defaultTimeLimit = 60 * 10
 
@@ -66,9 +65,10 @@ const tokenListToObject = array =>
     return obj
   }, {})
 
-function Swap({ selectedProvider, tokenList, tx }) {
+function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
+  const [defaultTokenOut, setDefaultTokenOut] = useState('NCT')
   const [tokenIn, setTokenIn] = useState(defaultToken)
-  const [tokenOut, setTokenOut] = useState(defaultTokenOut)
+  const [tokenOut, setTokenOut] = useState(linkTokenOut || defaultTokenOut)
   const [exact, setExact] = useState()
   const [amountIn, setAmountIn] = useState()
   const [amountInMax, setAmountInMax] = useState()
@@ -221,14 +221,14 @@ function Swap({ selectedProvider, tokenList, tx }) {
         }
       }
 
-      if (tokenOut) {
-        const tempContractOut = new ethers.Contract(tokens[tokenOut].address, erc20Abi, selectedProvider)
+      if (tokenOut === 'MATIC') {
+        const tempContractOut = new ethers.Contract('0x0000000000000000000000000000000000001010', erc20Abi, selectedProvider)
         const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
 
         setBalanceOut(newBalanceOut)
       }
 
-      if (tokenOut) {
+      if (tokenOut && tokenOut !=='MATIC') {
         const tempContractOut = new ethers.Contract(tokens[tokenOut].address, erc20Abi, selectedProvider)
         const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
 

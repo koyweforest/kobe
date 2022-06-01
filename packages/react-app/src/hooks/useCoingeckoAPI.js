@@ -4,11 +4,11 @@ import sushiTokenList from '../sushiTL.json'
 
 const { utils, BigNumber } = require('ethers')
 
-export const usePriceHistory = (assetAddress, days, interval) => {
+export const usePriceHistory = (symbol, days, interval) => {
   const [prices, setPrices] = useState()
 
   const asset = sushiTokenList.find(token => {
-    return token.address === assetAddress
+    return token.symbol === symbol
   })
 
   useEffect(() => {

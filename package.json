@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "@uniswap/widgets": "^0.0.26-beta",
+    "chart.js": "^3.8.0",
     "react-redux": "^7.2.7"
   },
   "devDependencies": {
