@@ -273,9 +273,9 @@ export const useAccountTransactions = (address, days=30) => {
   return transactions
 }
 
-export const useOldBalance = (address, assetAddress, days=30) => {
-  const [balance, setBalance] = useState(0)
-  const newestTimeStamp = Math.round((new Date()). getTime() / 1000) - (days || 30) * 24 * 60 * 60
+export const useOldBalance = (address, assetAddress) => {
+  const [transactions, setTransactions] = useState(0)
+  const newestTimeStamp = Math.round((new Date()). getTime() / 1000)
 
   useEffect(() => {
     if (!address || !assetAddress) return 0
@@ -321,18 +321,8 @@ export const useOldBalance = (address, assetAddress, days=30) => {
         )
         const data = await response.json()
 
-        if(data.message === 'OK') {
-          let _balance = 0
-
-          data.result.forEach(tx => {
-            if(tx.from === address.toLowerCase())
-              _balance -= utils.formatUnits(tx.value,tx.tokenDecimal)*1
-            else
-              _balance += utils.formatUnits(tx.value,tx.tokenDecimal)*1
-          })
-
-          setBalance(_balance)
-        }
+        if(data.message === 'OK')
+          setTransactions(data.result)
 
       } catch(e) {
         console.log(`Error getting Polygonscan Transactions. ${e}`)
@@ -342,5 +332,5 @@ export const useOldBalance = (address, assetAddress, days=30) => {
     getTransactions()
   }, [address, assetAddress, newestTimeStamp])
 
-  return balance
+  return transactions
 }

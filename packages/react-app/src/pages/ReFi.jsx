@@ -7,6 +7,7 @@ import { useGasPrice } from 'eth-hooks'
 
 import ConnectButton from '../components/common/ConnectButton'
 import BuySetModal from '../components/RegenDefi/BuySetModal'
+import Investments from '../components/RegenDefi/Investments'
 import MyRegenPositionsFull from '../components/RegenDefi/MyRegenPositionsFull'
 import SimpleRamp from '../components/RegenDefi/SimpleRamp'
 import SwapModal from '../components/RegenDefi/SwapModal'
@@ -102,6 +103,11 @@ return (
       <Swap
         selectedProvider={injectedProvider}
         tokenList={tokenList}
+      />
+      }
+      {!isLoadingAccount && address &&
+      <Investments
+        address={address}
       />
       }
       {!isLoadingAccount && address && writeContracts && contracts && swapping &&

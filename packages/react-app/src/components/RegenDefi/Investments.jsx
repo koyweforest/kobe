@@ -31,21 +31,64 @@ ChartJS.register(
 
 const Investments = ({ address, contracts }) => {
   const transactions = useAccountTransactions(address)
-  const oldBalanceNCT = useOldBalance(address,'0xD838290e877E0188a4A44700463419ED96c16107',30)
-  const oldBalanceBCT = useOldBalance(address,'0x2F800Db0fdb5223b3C3f354886d907A671414A7F',30)
-  const oldBalanceMCO2 = useOldBalance(address,'0xAa7DbD1598251f856C12f63557A4C4397c253Cea',30)
-  const oldBalanceKLIMA = useOldBalance(address,'0x4e78011ce80ee02d2c3e649fb657e45898257815',30)
-  const oldBalanceSKlIMA = useOldBalance(address,'0xb0C22d8D350C67420f06F48936654f567C73E8C8',30)
-  const oldBalanceCBTC = useOldBalance(address,'0x7958e9fa5cf56aebedd820df4299e733f7e8e5dd',30)
-  const oldBalanceCNBED = useOldBalance(address,'0x0765425b334d7db1f374d03f4261ac191172bef7',30)
+  const nctTxs = useOldBalance(address,'0xD838290e877E0188a4A44700463419ED96c16107')
+  const bctTxs = useOldBalance(address,'0x2F800Db0fdb5223b3C3f354886d907A671414A7F')
+  const mco2txs = useOldBalance(address,'0xAa7DbD1598251f856C12f63557A4C4397c253Cea')
+  const klimaTxs = useOldBalance(address,'0x4e78011ce80ee02d2c3e649fb657e45898257815')
+  const sklimaTxs = useOldBalance(address,'0xb0C22d8D350C67420f06F48936654f567C73E8C8')
+  const cbtcTxs = useOldBalance(address,'0x7958e9fa5cf56aebedd820df4299e733f7e8e5dd')
+  const cnbedTxs = useOldBalance(address,'0x0765425b334d7db1f374d03f4261ac191172bef7')
 
-  console.log('oldBalanceNCT',oldBalanceNCT)
-  console.log('oldBalanceBCT',oldBalanceBCT)
-  console.log('oldBalanceMCO2',oldBalanceMCO2)
-  console.log('oldBalanceKLIMA',oldBalanceKLIMA)
-  console.log('oldBalanceSKlIMA',oldBalanceSKlIMA)
-  console.log('oldBalanceCBTC',oldBalanceCBTC)
-  console.log('oldBalanceCNBED',oldBalanceCNBED)
+  const getDatesBetween = pastDays => {
+    const dates = []
+    const endDate = new Date()
+    const currentDate = new Date(new Date().setDate(endDate.getDate()-pastDays))
+
+    while (currentDate < endDate) {
+      dates.push(new Date(currentDate))
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    dates.push(endDate)
+
+    return dates
+  }
+
+  useEffect(() => {
+    const calculateBalances = () => {
+      const dates = getDatesBetween(30)
+      const portfolio = []
+
+      if(nctTxs && bctTxs && mco2txs && klimaTxs && sklimaTxs && cbtcTxs && cnbedTxs) {
+        const nctBalance = {}
+
+        // console.log(nctTxs)
+        dates.forEach(date => {
+          nctTxs.forEach(tx => {
+            if(tx.timeStamp <= date.getTime())
+              nctBalance[date.getTime()] += (address.toLowerCase() === tx.from.toLowerCase() ? (1) : (-1)) * Number(utils.formatUnits(tx.value,tx.tokenDecimal))
+          })
+        })
+        console.log(nctBalance)
+      }
+
+
+      const newChartData = {
+        labels: dates,
+        datasets: [
+          {
+            label: 'CBTC',
+            data: portfolio,
+            borderColor: '#3f9c49',
+            backgroundColor: '#3f9c49',
+          },
+        ],
+      }
+
+    }
+
+    calculateBalances()
+  },[transactions,nctTxs,bctTxs,mco2txs,klimaTxs,sklimaTxs,cbtcTxs,cnbedTxs])
 
   return (
     <Row justify="center" className="mb-md">
@@ -66,7 +109,7 @@ const Investments = ({ address, contracts }) => {
               </a>
               {(item.value/10**item.tokenDecimal).toFixed(2)} {item.tokenSymbol}
               {address.toLowerCase() === item.from.toLowerCase() ? ' to ':' from '}
-              {address.toLowerCase() === item.from.toLowerCase() ? (item.to > 11 ? `${item.to.slice(0, 6)}...${item.to.substr(-3)}` : item.to) : (item.to > 11 ? `${item.from.slice(0, 6)}...${item.from.substr(-3)}` : item.from)}
+              {address.toLowerCase() === item.from.toLowerCase() ? (item.to.length > 11 ? `${item.to.slice(0, 6)}...${item.to.substr(-3)}` : item.to) : (item.from.length > 11 ? `${item.from.slice(0, 6)}...${item.from.substr(-3)}` : item.from)}
               {' on '}{(new Date(item.timeStamp*1000)).toDateString()}
             </List.Item>
           )
