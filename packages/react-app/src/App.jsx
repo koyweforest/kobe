@@ -10,7 +10,7 @@ import Dashboard from './pages/Dashboard'
 import DebugPage from './pages/DebugPage'
 import EmissionPage from './pages/Emission'
 import Journey from './pages/Journey'
-// import Metrics from './pages/metrics'
+import Metrics from './pages/metrics'
 import Offsets from './pages/Offsets'
 import Pledge from './pages/Pledge'
 import Ranking from './pages/Ranking'
@@ -54,6 +54,9 @@ const App = () => {
               </Route>
               <Route exact path="/emission">
                 <EmissionPage />
+              </Route>
+              <Route exact path="/metrics">
+                <Metrics />
               </Route>
               <Route exact path="/calculator">
                 <CalculatorPage />

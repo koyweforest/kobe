@@ -4,6 +4,16 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { useParams } from 'react-router-dom/cjs/react-router-dom'
 import { Button, Col, Row, Space, Typography } from 'antd'
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js'
 import { useGasPrice } from 'eth-hooks'
 
 import CoinData from '../components/CoinData'
@@ -22,7 +32,7 @@ import { getFightData } from '../helpers/dashboardData'
 import { useCoingeckoAPI, usePriceHistory } from '../hooks/useCoingeckoAPI'
 import tokenList from '../sushiTL.json'
 
-const { Title } = Typography
+
 
 const TokenProfile = () => {
 
@@ -53,15 +63,26 @@ const year= usePriceHistory(coinId.id, 'max', 'year')
 
     const GetCoinData = async () => {
 
-
-
-        setCoinData({ day: days, week, year })
-
+        setCoinData({
+          day: formatData(days.prices),
+          week: formatData(week.prices),
+          year: formatData(year.prices) })
 
     }
 
     GetCoinData()
   }, [days, week, year])
+
+  console.log(coinData)
+
+  const formatData = data => {
+    return data.map(el => {
+      return {
+        t: el[0],
+        y: el[1].toFixed(2),
+      }
+    })
+  }
 
 
 
@@ -74,7 +95,7 @@ return (
         linkTokenOut={coinId.id}
       />
 }
-<HistoryChart />
+<HistoryChart data={coinData} />
 <CoinData />
 
 
