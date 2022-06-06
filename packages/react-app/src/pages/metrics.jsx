@@ -23,7 +23,7 @@ require('dotenv').config()
 
 const { Title: TypoTitle } = Typography
 const { utils, BigNumber } = require('ethers')
-const admins = process.env.REACT_APP_ADMINS.split(',')
+
 
 ChartJS.register(
   CategoryScale,
@@ -192,7 +192,7 @@ const Metrics = () => {
 
   return (
     <>
-      { address && admins.includes(address) &&
+      { address &&
       <>
         <Row justify="center" className="mb-md">
           <Col span={24} style={{ textAlign:'center' }} >

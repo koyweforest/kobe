@@ -1,20 +1,25 @@
 /* eslint-disable max-lines-per-function */
+import 'chartjs-adapter-date-fns'
+
 import React, { useEffect,useRef, useState  } from 'react'
 import {
     BarController,
     BarElement,
     CategoryScale,
     Chart,
+    DateAdapter,
     Legend,
     LinearScale,
     LineController,
     LineElement,
     PointElement,
-    Title,
+    TimeScale,
+    Title as ChartTitle,
     Tooltip,
   } from 'chart.js'
+import { enUS } from 'date-fns/locale'
 
-  Chart.register(LineController, LineElement, PointElement, LinearScale, Title)
+  Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitle, TimeScale)
 
 const HistoryChart = ({ data }) => {
 
@@ -25,7 +30,10 @@ const HistoryChart = ({ data }) => {
     const { day, week,year } = data
 
 
-    const determineTimeFormat = () => {
+
+    useEffect(() => {
+
+      const determineTimeFormat = () => {
         switch (timeFormat) {
           case '24h':
             return day
@@ -38,12 +46,7 @@ const HistoryChart = ({ data }) => {
         }
       }
 
-    console.log('pricechart', day)
-
-    useEffect(() => {
-
         const chartStatus = Chart.getChart('mychart')
-
 
 
 
@@ -62,15 +65,13 @@ const HistoryChart = ({ data }) => {
             const myChart = new Chart(chartRef.current, {
                 type: 'line',
                 data: {
-                    datasets: [{
-                        label: 'Coin Price',
-                        data: determineTimeFormat(),
-                        backgroundColor: 'rgba(0,0,0, 0.5)',
-                        borderColor: 'rgba(174, 305, 194, 0.4',
-                        pointRadius: 0,
-
-                    }],
-                },
+                  datasets: [{
+                      label: '# of Votes',
+                      data: determineTimeFormat(),
+                      pointRadius: 0,
+                      borderWidth: 1,
+                  }],
+              },
                 options: {
                     lineHeightAnnotation: {
                       always: true,
@@ -84,25 +85,24 @@ const HistoryChart = ({ data }) => {
                     maintainAspectRatio: false,
                     responsive: true,
                     scales: {
-                      xAxis: [
+                      xAxes:
                         {
                           type: 'time',
                           distribution: 'linear',
                         },
-                      ],
                     },
                   },
             })
 
             setIsRendered(true)
     };
-},[determineTimeFormat, day, isRendered])
+},[timeFormat, year, week, day, isRendered])
 
 return(
     <div className='bg-white border mt-2 rounded p-3'>
         <div></div>
     <div>
-        <canvas ref={chartRef} id='mychart' width={100} height={100} />
+        <canvas ref={chartRef} id='mychart' width={1000} height={1000} />
 
     </div>
     <div className="chart-button mt-1">

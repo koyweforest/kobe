@@ -55,8 +55,8 @@ const TokenProfile = () => {
 
   const [coinData, setCoinData] = useState({})
 
-const days = usePriceHistory(coinId.id, 1, 'daily')
-const week = usePriceHistory(coinId.id, 14, 'week')
+const days = usePriceHistory(coinId.id, 24, 'daily')
+const week = usePriceHistory(coinId.id, 36, 'week')
 const year= usePriceHistory(coinId.id, 'max', 'year')
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const year= usePriceHistory(coinId.id, 'max', 'year')
     GetCoinData()
   }, [days, week, year])
 
-  console.log(coinData)
+
 
   const formatData = data => {
     return data.map(el => {
@@ -83,6 +83,8 @@ const year= usePriceHistory(coinId.id, 'max', 'year')
       }
     })
   }
+
+
 
 
 
