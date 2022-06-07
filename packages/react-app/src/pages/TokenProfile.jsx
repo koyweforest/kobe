@@ -104,9 +104,6 @@ return (
 
 <Row>
 <div>
-<CoinData data={coinData.detail} />
-
-<hr />
 
 
   { !isLoadingAccount && address && injectedProvider &&
@@ -115,7 +112,13 @@ return (
         tokenList={tokenList}
          linkTokenOut={coinId?.id}
        />
- }</div>
+ }
+
+ <hr />
+<CoinData data={coinData.detail} />
+
+<hr />
+</div>
 </Row>
 </Row>
 
