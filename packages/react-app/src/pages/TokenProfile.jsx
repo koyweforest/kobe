@@ -58,9 +58,9 @@ const TokenProfile = () => {
 
   const [coinData, setCoinData] = useState({})
 
-const days = usePriceHistory(coinId.id, 1, '1hr')
-const week = usePriceHistory(coinId.id, 7, '12hr')
-const year= usePriceHistory(coinId.id, 'max', '3day')
+const days = usePriceHistory(coinId.id, 1, 'min')
+const week = usePriceHistory(coinId.id, 14, 'hr')
+const year= usePriceHistory(coinId.id, 365, '24hr')
 const detail= useDetailHistory(coinId.id)
 
  // console.log(detail)
@@ -107,11 +107,10 @@ return (
 </Row>
 
 <Row>
-<div style={{ height: '50%' }} >
+<div>
 <CoinData data={coinData.detail} />
   { !isLoadingAccount && address && injectedProvider &&
       <Swap
-width={'50%'}
         selectedProvider={injectedProvider}
         tokenList={tokenList}
          linkTokenOut={coinId?.id}

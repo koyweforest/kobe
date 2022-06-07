@@ -236,7 +236,7 @@ return(
           onClick={() => setTimeFormat('7d')}
           className="btn btn-outline-secondary btn-sm mx-1"
         >
-          7d
+          14d
         </button>
         <button
           onClick={() => setTimeFormat('1y')}
