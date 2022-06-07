@@ -101,14 +101,14 @@ return (
 
 <HistoryChart data={coinData} />
 
-<Row>
-
-
-</Row>
 
 <Row>
 <div>
 <CoinData data={coinData.detail} />
+
+<hr />
+
+
   { !isLoadingAccount && address && injectedProvider &&
       <Swap
         selectedProvider={injectedProvider}
