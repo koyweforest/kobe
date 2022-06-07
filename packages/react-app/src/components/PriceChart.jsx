@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import 'chartjs-adapter-date-fns'
 
@@ -10,6 +11,7 @@ import {
     CategoryScale,
     Chart,
     DateAdapter,
+    Filler,
     Legend,
     LinearScale,
     LineController,
@@ -23,7 +25,7 @@ import { enUS } from 'date-fns/locale'
 
 const { Title: TypoTitle } = Typography
 
-  Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitle, Tooltip, Legend, CategoryScale, TimeScale)
+  Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitle, Tooltip, Legend, CategoryScale, TimeScale, Filler)
 
 const HistoryChart = ({ data }) => {
 
@@ -48,7 +50,7 @@ useEffect(() => {
   }
 }) */
 
-// console.log(detail)
+console.log(detail)
 
     useEffect(() => {
 
@@ -64,7 +66,6 @@ useEffect(() => {
             return day
         }
       }
-
 
 
 
@@ -84,6 +85,8 @@ useEffect(() => {
 
 
 
+
+
         {
 
 
@@ -92,8 +95,9 @@ useEffect(() => {
                 type: 'line',
                 data: {
                   datasets: [{
+                    fill: true,
                     label: `${detail?.name} price`,
-                    backgroundColor: 'black',
+                    backgroundColor: '#90ee90',
                     borderColor: '#5AC53B',
                     pointBackgroundColor: 'rgba(0,0,0,0)',
                     pointBorderColor: 'rgba(0, 0, 0, 0)',
@@ -108,7 +112,9 @@ useEffect(() => {
                   }],
               },
                 options: {
-                  plugins: {
+                  plugins:
+                  {
+                   // tooltipline,
                   legend: {
                     display: false,
                   },
@@ -144,7 +150,7 @@ useEffect(() => {
                         beginAtZero: false,
                         type: 'linear',
                         ticks: {
-                          display: false,
+                          display: true,
                         },
                         grid: {
                           display:false,
@@ -157,7 +163,7 @@ useEffect(() => {
                             format: 'MM/DD/YY',
                           },
                           ticks: {
-                            display: false,
+                            display: true,
                           },
                           grid: {
                             display:false,
@@ -170,13 +176,13 @@ useEffect(() => {
 
             setIsRendered(true)
     };
-},[timeFormat, year, week, day, isRendered])
+},[detail, timeFormat, year, week, day, isRendered])
 
 const renderPrice = () => {
   if (detail)
     return (
       <>
-        <p className="my-0">${detail.current_price.toFixed(2)}</p>
+        <h1 className="my-0">${detail.current_price.toFixed(2)} ({detail.price_change_percentage_24h.toFixed(2)}%)</h1>
         <p
           className={
             detail.price_change_24h < 0
@@ -184,9 +190,21 @@ const renderPrice = () => {
               : 'text-success my-0'
           }
         >
-          {detail.price_change_percentage_24h.toFixed(2)}%
+
         </p>
       </>
+    )
+
+}
+
+const renderDetail= () => {
+  if (detail)
+    return (
+<h1> <img
+src={detail?.image}
+width={35}
+height={35}
+/>          {(detail?.symbol).toUpperCase()} </h1>
     )
 
 }
@@ -197,11 +215,15 @@ return(
 
 
     <div className='bg-white border mt-2 rounded p-3'>
-        <div></div>
+<div>{renderDetail()}</div>
+
+    <div>{renderPrice()}</div>
 
     <div>
-        <canvas ref={chartRef} id='mychart' width={500} height={500} ></canvas>
+        <canvas ref={chartRef} id='mychart' width={800} height={500} ></canvas>
     </div>
+
+
 
     <div className="chart-button mt-1">
         <button

@@ -39,6 +39,8 @@ const TokenProfile = () => {
 
     const coinId = useParams()
 
+    console.log(coinId.id)
+
 
 
     const { contracts, USDPrices, walletBalance, isPledged, isLoadingBalances, writeContracts } = useContext(WalletContext)
@@ -57,11 +59,11 @@ const TokenProfile = () => {
   const [coinData, setCoinData] = useState({})
 
 const days = usePriceHistory(coinId.id, 1, '1hr')
-const week = usePriceHistory(coinId.id, 7, '1hr')
-const year= usePriceHistory(coinId.id, 'max', '1hr')
+const week = usePriceHistory(coinId.id, 7, '12hr')
+const year= usePriceHistory(coinId.id, 'max', '3day')
 const detail= useDetailHistory(coinId.id)
 
- console.log(detail)
+ // console.log(detail)
 
   useEffect(() => {
 
@@ -77,7 +79,7 @@ const detail= useDetailHistory(coinId.id)
     }
 
     GetCoinData()
-  }, [detail, days, week, year])
+  }, [coinId.id, detail, days, week, year])
 
 
 
@@ -95,14 +97,29 @@ const detail= useDetailHistory(coinId.id)
 
 
 return (
-    <Row justify="center" className="mb-md">
+    <Row justify="space-around" className="mb-md">
 
-<CoinData data={coinData.detail} />
 <HistoryChart data={coinData} />
 
+<Row>
 
 
 </Row>
+
+<Row>
+<div style={{ height: '50%' }} >
+<CoinData data={coinData.detail} />
+  { !isLoadingAccount && address && injectedProvider &&
+      <Swap
+width={'50%'}
+        selectedProvider={injectedProvider}
+        tokenList={tokenList}
+         linkTokenOut={coinId?.id}
+       />
+ }</div>
+</Row>
+</Row>
+
 )
 }
 

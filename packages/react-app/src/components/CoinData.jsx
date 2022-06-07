@@ -8,12 +8,12 @@ const CoinData = ({ data }) => {
           <div className="col-sm">
             <div className="d-flex flex-column">
               <span className="text-muted coin-data-category"></span>
-              <span>{data.name}</span>
+              <span>{data.name} ({(data.symbol).toUpperCase()})</span>
             </div>
             <hr />
             <div className="d-flex flex-column">
               <span className="text-muted coin-data-category">
-                  24hr Price Change
+                  24hr Price Change:
               </span>
               <span>    {data.price_change_percentage_24h} %</span>
             </div>
@@ -29,7 +29,7 @@ const CoinData = ({ data }) => {
           <div className="col-sm">
 
             <div className="d-flex flex-column">
-            <span className="text-muted coin-data-category">    Volume(24H)  </span>
+            <span className="text-muted coin-data-category">    Volume(24H):  </span>
               <span>{data.total_volume}</span>
             </div>
           </div>
