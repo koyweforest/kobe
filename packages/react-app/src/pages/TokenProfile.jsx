@@ -29,6 +29,7 @@ import { NetworkContext } from '../contexts/NetworkContext'
 import { WalletContext } from '../contexts/WalletContext'
 import { Transactor } from '../helpers'
 import { getFightData } from '../helpers/dashboardData'
+import { useDetailHistory } from '../hooks/CoinGeckoDetails'
 import { useCoingeckoAPI, usePriceHistory } from '../hooks/useCoingeckoAPI'
 import tokenList from '../sushiTL.json'
 
@@ -55,30 +56,35 @@ const TokenProfile = () => {
 
   const [coinData, setCoinData] = useState({})
 
-const days = usePriceHistory(coinId.id, 24, 'daily')
-const week = usePriceHistory(coinId.id, 36, 'week')
-const year= usePriceHistory(coinId.id, 'max', 'year')
+const days = usePriceHistory(coinId.id, 1, '1hr')
+const week = usePriceHistory(coinId.id, 7, '1hr')
+const year= usePriceHistory(coinId.id, 'max', '1hr')
+const detail= useDetailHistory(coinId.id)
+
+ console.log(detail)
 
   useEffect(() => {
 
     const GetCoinData = async () => {
 
         setCoinData({
-          day: formatData(days.prices),
-          week: formatData(week.prices),
-          year: formatData(year.prices) })
+          day: formatData(days?.prices),
+          week: formatData(week?.prices),
+          year: formatData(year?.prices),
+          detail: detail?.data[0],
+        })
 
     }
 
     GetCoinData()
-  }, [days, week, year])
+  }, [detail, days, week, year])
 
 
 
   const formatData = data => {
-    return data.map(el => {
+    return data?.map(el => {
       return {
-        t: el[0],
+        x: el[0],
         y: el[1].toFixed(2),
       }
     })
@@ -90,15 +96,10 @@ const year= usePriceHistory(coinId.id, 'max', 'year')
 
 return (
     <Row justify="center" className="mb-md">
-      {!isLoadingAccount && address && injectedProvider &&
-      <Swap
-        selectedProvider={injectedProvider}
-        tokenList={tokenList}
-        linkTokenOut={coinId.id}
-      />
-}
+
+<CoinData data={coinData.detail} />
 <HistoryChart data={coinData} />
-<CoinData />
+
 
 
 </Row>

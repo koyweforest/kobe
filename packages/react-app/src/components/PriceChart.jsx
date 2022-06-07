@@ -2,6 +2,8 @@
 import 'chartjs-adapter-date-fns'
 
 import React, { useEffect,useRef, useState  } from 'react'
+import { Line } from 'react-chartjs-2'
+import { Checkbox,Input,Typography } from 'antd'
 import {
     BarController,
     BarElement,
@@ -19,17 +21,34 @@ import {
   } from 'chart.js'
 import { enUS } from 'date-fns/locale'
 
-  Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitle, TimeScale)
+const { Title: TypoTitle } = Typography
+
+  Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitle, Tooltip, Legend, CategoryScale, TimeScale)
 
 const HistoryChart = ({ data }) => {
 
     const [isRendered, setIsRendered] = useState(false)
     const [timeFormat, setTimeFormat] = useState('24h')
+    const [mode, setMode] = useState(true)
 
     const chartRef = useRef()
-    const { day, week,year } = data
+    const { day, week, year, detail } = data
 
+    const onChange = e => {
+      console.log(`checked = ${e.target.checked}`)
+    }
 
+/*
+TODO: IMPLEMENT DARKMODE
+
+useEffect(() => {
+
+  const darkMode = Checkbox => {
+    !setMode()
+  }
+}) */
+
+// console.log(detail)
 
     useEffect(() => {
 
@@ -46,6 +65,9 @@ const HistoryChart = ({ data }) => {
         }
       }
 
+
+
+
         const chartStatus = Chart.getChart('mychart')
 
 
@@ -54,9 +76,13 @@ const HistoryChart = ({ data }) => {
         // eslint-disable-next-line curly
         if (chartStatus !==undefined) {
 
+
+
             chartStatus.destroy()
             setIsRendered(false)
-} else (!isRendered && chartStatus)
+} else (!isRendered && chartStatus && detail)
+
+
 
         {
 
@@ -66,13 +92,41 @@ const HistoryChart = ({ data }) => {
                 type: 'line',
                 data: {
                   datasets: [{
-                      label: '# of Votes',
-                      data: determineTimeFormat(),
+                    label: `${detail?.name} price`,
+                    backgroundColor: 'black',
+                    borderColor: '#5AC53B',
+                    pointBackgroundColor: 'rgba(0,0,0,0)',
+                    pointBorderColor: 'rgba(0, 0, 0, 0)',
+                    pointHoverBackgroundColor: '#5AC53B',
+                    pointHoverBorderColor: '#000000',
+                    pointHoverBorderWidth: 4,
+                    pointHoverRadius: 6,
+
+                      data:  determineTimeFormat() ,
                       pointRadius: 0,
-                      borderWidth: 1,
+                      borderWidth: 2,
                   }],
               },
                 options: {
+                  plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+                  hover: {
+                    intersect: false,
+                  },
+                  elements: {
+                    line: {
+                      tension: 0,
+                    },
+                  },
+                  tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                    },
+                  },
                     lineHeightAnnotation: {
                       always: true,
                       hover: false,
@@ -85,10 +139,30 @@ const HistoryChart = ({ data }) => {
                     maintainAspectRatio: false,
                     responsive: true,
                     scales: {
+                      yAxes: {
+
+                        beginAtZero: false,
+                        type: 'linear',
+                        ticks: {
+                          display: false,
+                        },
+                        grid: {
+                          display:false,
+                        },
+                      },
                       xAxes:
                         {
                           type: 'time',
-                          distribution: 'linear',
+                          time: {
+                            format: 'MM/DD/YY',
+                          },
+                          ticks: {
+                            display: false,
+                          },
+                          grid: {
+                            display:false,
+                          },
+
                         },
                     },
                   },
@@ -98,13 +172,37 @@ const HistoryChart = ({ data }) => {
     };
 },[timeFormat, year, week, day, isRendered])
 
+const renderPrice = () => {
+  if (detail)
+    return (
+      <>
+        <p className="my-0">${detail.current_price.toFixed(2)}</p>
+        <p
+          className={
+            detail.price_change_24h < 0
+              ? 'text-danger my-0'
+              : 'text-success my-0'
+          }
+        >
+          {detail.price_change_percentage_24h.toFixed(2)}%
+        </p>
+      </>
+    )
+
+}
+
+
+
 return(
+
+
     <div className='bg-white border mt-2 rounded p-3'>
         <div></div>
-    <div>
-        <canvas ref={chartRef} id='mychart' width={1000} height={1000} />
 
+    <div>
+        <canvas ref={chartRef} id='mychart' width={500} height={500} ></canvas>
     </div>
+
     <div className="chart-button mt-1">
         <button
           onClick={() => setTimeFormat('24h')}
