@@ -6,7 +6,7 @@ import { StyledButton } from '../common/StyledButton'
 
 const { Text } = Typography
 const StyledTable = styled(Table)`
-  border: 1px solid rgba(0, 0, 0, 0.16);
+  border: 2px solid rgba(0, 0, 0, 0.16);
   border-radius: 10px;
   overflow: hidden;
   width: 100%;
@@ -19,12 +19,14 @@ export const TableInfo = ({ data, handleModalUp }) => {
       dataIndex: 'token',
       key: 'token',
       render: tokenProp => (
-        <Row justify="space-between" align="middle">
+        <Row justify="left" align="middle">
+          <div style={{ margin: 20 }}>
+                  <a href={tokenProp.url} target="_blank">
+            <Image src={tokenProp.icon} preview={false} height={42} width={42}/>
+          </a>
+          </div>
           <a href={tokenProp.url} target="_blank">
             <Text>{tokenProp.title}</Text>
-          </a>
-          <a href={tokenProp.url} target="_blank">
-            <Image src={tokenProp.icon} preview={false} height={42} width={42} />
           </a>
         </Row>
       ),
@@ -40,17 +42,11 @@ export const TableInfo = ({ data, handleModalUp }) => {
       key: 'co2',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
       title: 'Contract',
       dataIndex: 'contract',
       key: 'contract',
       render: contract => (
         <Row justify="space-between" align="middle">
-          <Text>{contract.title}</Text>
           <a href={contract.url} target="_blank">
             <Image src="icon/leave.svg" preview={false} height={24} />
           </a>
