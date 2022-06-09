@@ -1,37 +1,18 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react'
-import ReactGA from 'react-ga4'
 import { useParams } from 'react-router-dom/cjs/react-router-dom'
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import {
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-} from 'chart.js'
-import { useGasPrice } from 'eth-hooks'
+import { Card, Row } from 'antd'
 
 import CoinData from '../components/CoinData'
-import ConnectButton from '../components/common/ConnectButton'
 import HistoryChart from '../components/PriceChart'
-import BuySetModal from '../components/RegenDefi/BuySetModal'
-import MyRegenPositionsFull from '../components/RegenDefi/MyRegenPositionsFull'
-import SimpleRamp from '../components/RegenDefi/SimpleRamp'
-import SwapModal from '../components/RegenDefi/SwapModal'
 import Swap from '../components/Swap'
 import TokenDisplay from '../components/TokenDisplay'
 import { IndexContext } from '../contexts/IndexContext'
 import { NetworkContext } from '../contexts/NetworkContext'
 import { WalletContext } from '../contexts/WalletContext'
-import { Transactor } from '../helpers'
-import { getFightData } from '../helpers/dashboardData'
 import { useDetailHistory } from '../hooks/CoinGeckoDetails'
-import { useCoingeckoAPI, usePriceHistory } from '../hooks/useCoingeckoAPI'
+import { usePriceHistory } from '../hooks/useCoingeckoAPI'
 import tokenList from '../sushiTL.json'
 
 
@@ -84,9 +65,9 @@ const detail= useDetailHistory(coinId.id)
 ]
 
 const contentListNoTitle = {
-  Chart: <p>
-  <HistoryChart data={coinData} /></p>,
-  Info: <p><TokenDisplay data={coinData.detail} /></p>,
+  Chart:
+  <HistoryChart data={coinData} />,
+  Info: <TokenDisplay data={coinData.detail} />,
 
 }
 
@@ -146,7 +127,7 @@ return (
 
 <Card
         style={{
-          width: '65%',
+          width: '50%',
         }}
 
         tabList={tabListNoTitle}

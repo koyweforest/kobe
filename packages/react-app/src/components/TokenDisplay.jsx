@@ -1,6 +1,6 @@
 import React, { useEffect, useState }  from 'react'
 import { useParams } from 'react-router-dom/cjs/react-router-dom'
-import { Button,Card } from 'antd'
+import { Button } from 'antd'
 
 import sushiTokenList from '../sushiTL.json'
 
@@ -66,7 +66,7 @@ height={35}
 
             <div style= {{ fontSize: 'large', align: 'start', marginTop: '1%', marginBottom: '5%' }}className="d-flex flex-column">
             <span className="text-muted coin-data-category" ></span>
-             <h0> <span>{asset.subdescription}</span></h0>
+             <span>{asset.subdescription}</span>
             </div>
 <br></br>
 <br></br>
@@ -75,10 +75,10 @@ height={35}
 
             <hr/>
             Explorer
-<Button type='link' href={`https://polygonscan.com/token/${asset.poly}`} icon={'PolygonScan'}> </Button>
+<Button type='link' href={`https://polygonscan.com/token/${asset.poly}`}> PolygonScan </Button>
 <hr/>
 Website
-<Button type='link' href={`${asset.website}`} icon={`${asset.website}`}> </Button>
+<Button type='link' href={`${asset.website}`} > {asset.website} </Button>
             <hr/>
           </div>
         </div>

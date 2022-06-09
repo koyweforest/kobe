@@ -13,6 +13,7 @@ const StyledTable = styled(Table)`
 `
 
 export const TableInfo = ({ data, handleModalUp }) => {
+
   const columns = [
     {
       title: 'Token',
@@ -57,7 +58,7 @@ export const TableInfo = ({ data, handleModalUp }) => {
       title: 'Action',
       dataIndex: 'buy',
       key: 'buy',
-      render: props => handleModalUp && props.meta && props.meta === 'index' || props.meta === 'token' ?
+      render: props => handleModalUp && props.meta && props.meta === 'index' ?
       <StyledButton
         onClick={() => {
           handleModalUp(props.symbol)
@@ -65,7 +66,7 @@ export const TableInfo = ({ data, handleModalUp }) => {
         $type="primary">{props.title}
       </StyledButton>
       :
-      <StyledButton href={props.url} target="_blank" $type="primary">{props.title}</StyledButton>,
+      <StyledButton href={`https://app.koywe.com/#/coins/${props.symbol}`} target="_blank" $type="primary">{props.title}</StyledButton>,
     },
   ]
 
