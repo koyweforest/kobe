@@ -66,7 +66,11 @@ export const TableInfo = ({ data, handleModalUp }) => {
         $type="primary">{props.title}
       </StyledButton>
       :
-      <StyledButton href={`https://app.koywe.com/#/coins/${props.symbol}`} target="_blank" $type="primary">{props.title}</StyledButton>,
+      <Link to={`/coins/${props.symbol}`} passHref>
+        <a>
+          <StyledButton src="icon/leave.svg" $type="primary">{props.title}</StyledButton>
+        </a>
+      </Link>,
     },
   ]
 
