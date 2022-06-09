@@ -47,7 +47,7 @@ const makeCall = async (callName, contract, args, metadata = {}) => {
     if (args) result = await contract[callName](...args, metadata)
     else result = await contract[callName]()
 
-    console.log('success')
+
 
     return result
   }
@@ -88,6 +88,7 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
   const [settingsVisible, setSettingsVisible] = useState(false)
   const [swapModalVisible, setSwapModalVisible] = useState(false)
   const [rawPrice, setRawPrice] = useState()
+  const [parameters, setParameters] = useState()
 
   const [tokens, setTokens] = useState()
   const [invertPrice, setInvertPrice] = useState(false)
@@ -116,7 +117,9 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
   const getTrades = async () => {
     if (tokenIn && tokenOut && (amountIn || amountOut)) {
 
+      console.log(tokenOut)
 
+if (tokenOut === 'MATIC') {
       const _params = {
         buyToken: tokens[tokenOut].address,
         sellToken: tokens[tokenIn].address,
@@ -124,18 +127,33 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
         buyTokenPercentageFee: '0.00',
       }
 
+      setParameters(_params)
+    }
+
+    if (tokenOut !== 'MATIC') {
+      const _params = {
+        buyToken: tokens[tokenOut].address,
+        sellToken: tokens[tokenIn].address,
+        feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
+        buyTokenPercentageFee: '0.02',
+      }
+
+      setParameters(_params)
       console.log(_params)
 
-      exact === 'out' ?
-        _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
-        :
-        _params.sellAmount = ethers.utils.parseUnits(`${amountIn}`,tokens[tokenIn].decimals).toString()
+    }
+    console.log(parameters)
 
-      if(slippageTolerance) _params.slippagePercentage = slippageTolerance
+      exact === 'out' ?
+        parameters.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
+        :
+        parameters.sellAmount = ethers.utils.parseUnits(`${amountIn}`,tokens[tokenIn].decimals).toString()
+
+      if(slippageTolerance) parameters.slippagePercentage = slippageTolerance
 
       try{
         const response = await fetch(
-          `https://polygon.api.0x.org/swap/v1/price?${qs.stringify(_params)}`,
+          `https://polygon.api.0x.org/swap/v1/price?${qs.stringify(parameters)}`,
         )
         const tokdata = await response.json()
 
@@ -322,29 +340,43 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
     const accountList = await selectedProvider.listAccounts()
     const address = accountList[0]
 
-    const _params = {
-      buyToken: tokens[tokenOut].address,
-      sellToken: tokens[tokenIn].address,
-      takerAddres: address,
-      feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
-      buyTokenPercentageFee: '0.00',
+    if (tokenOut === 'MATIC') {
+      const _params = {
+        buyToken: tokens[tokenOut].address,
+        sellToken: tokens[tokenIn].address,
+        feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
+        buyTokenPercentageFee: '0.00',
+      }
+
+      setParameters(_params)
     }
 
-    console.log(_params)
+    if (tokenOut !== 'MATIC') {
+      const _params = {
+        buyToken: tokens[tokenOut].address,
+        sellToken: tokens[tokenIn].address,
+        feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
+        buyTokenPercentageFee: '0.02',
+      }
+
+      setParameters(_params)
+    }
+
+    console.log(parameters)
 
     exact === 'out' ?
-      _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
+      parameters.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
       :
-      _params.sellAmount = ethers.utils.parseUnits(`${amountIn}`,tokens[tokenIn].decimals).toString()
+      parameters.sellAmount = ethers.utils.parseUnits(`${amountIn}`,tokens[tokenIn].decimals).toString()
 
-    if(slippageTolerance) _params.slippagePercentage = slippageTolerance
+    if(slippageTolerance) parameters.slippagePercentage = slippageTolerance
 
     try{
 
-      console.log(_params)
+      console.log(parameters)
 
       const response = await fetch(
-        `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(_params)}`,
+        `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(parameters)}`,
       )
       const tokdata = await response.json()
 

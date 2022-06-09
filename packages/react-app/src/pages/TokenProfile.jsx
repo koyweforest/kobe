@@ -36,6 +36,7 @@ import tokenList from '../sushiTL.json'
 
 
 
+
 const TokenProfile = () => {
 
     const coinId = useParams()
@@ -135,7 +136,7 @@ const onTab2Change = key => {
     GetCoinLink()
   }, [coinId.id, coinId])
 
-console.log(coinLink)
+
 
 
 return (
