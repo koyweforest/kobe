@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { useParams } from 'react-router-dom/cjs/react-router-dom'
-import { Button, Col, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -24,6 +24,7 @@ import MyRegenPositionsFull from '../components/RegenDefi/MyRegenPositionsFull'
 import SimpleRamp from '../components/RegenDefi/SimpleRamp'
 import SwapModal from '../components/RegenDefi/SwapModal'
 import Swap from '../components/Swap'
+import TokenDisplay from '../components/TokenDisplay'
 import { IndexContext } from '../contexts/IndexContext'
 import { NetworkContext } from '../contexts/NetworkContext'
 import { WalletContext } from '../contexts/WalletContext'
@@ -39,7 +40,7 @@ const TokenProfile = () => {
 
     const coinId = useParams()
 
-    console.log(coinId.id)
+    // console.log(coinId.id)
 
 
 
@@ -57,6 +58,11 @@ const TokenProfile = () => {
   const [swapping, setSwapping] = useState(false)
 
   const [coinData, setCoinData] = useState({})
+  const [coinLink, setCoinLink] = useState()
+
+
+  const [activeTabKey1, setActiveTabKey1] = useState('Chart')
+  const [activeTabKey2, setActiveTabKey2] = useState('app')
 
 const days = usePriceHistory(coinId.id, 1, 'min')
 const week = usePriceHistory(coinId.id, 14, 'hr')
@@ -64,6 +70,32 @@ const year= usePriceHistory(coinId.id, 365, '24hr')
 const detail= useDetailHistory(coinId.id)
 
  // console.log(detail)
+
+ const tabListNoTitle = [
+  {
+    key: 'Chart',
+    tab: 'Chart',
+  },
+  {
+    key: 'Info',
+    tab: 'Info',
+  },
+]
+
+const contentListNoTitle = {
+  Chart: <p>
+  <HistoryChart data={coinData} /></p>,
+  Info: <p><TokenDisplay data={coinData.detail} /></p>,
+
+}
+
+const onTab1Change = key => {
+  setActiveTabKey1(key)
+}
+
+const onTab2Change = key => {
+  setActiveTabKey2(key)
+}
 
   useEffect(() => {
 
@@ -92,14 +124,42 @@ const detail= useDetailHistory(coinId.id)
     })
   }
 
+  useEffect(() => {
 
+    const GetCoinLink = async () => {
 
+        setCoinLink(coinId.id)
+
+    }
+
+    GetCoinLink()
+  }, [coinId.id, coinId])
+
+console.log(coinLink)
 
 
 return (
+
     <Row justify="space-around" className="mb-md">
 
-<HistoryChart data={coinData} />
+
+<Card
+        style={{
+          width: '65%',
+        }}
+
+        tabList={tabListNoTitle}
+        activeTabKey={activeTabKey1}
+        onTabChange={key => {
+          onTab1Change(key)
+        }}
+      >
+        {contentListNoTitle[activeTabKey1]}
+      </Card>
+
+
+
+
 
 
 <Row>
@@ -110,7 +170,8 @@ return (
       <Swap
         selectedProvider={injectedProvider}
         tokenList={tokenList}
-         linkTokenOut={coinId?.id}
+        linkTokenOut={coinLink}
+
        />
  }
 
@@ -120,6 +181,8 @@ return (
 <hr />
 </div>
 </Row>
+
+
 </Row>
 
 )

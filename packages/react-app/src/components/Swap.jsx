@@ -47,6 +47,8 @@ const makeCall = async (callName, contract, args, metadata = {}) => {
     if (args) result = await contract[callName](...args, metadata)
     else result = await contract[callName]()
 
+    console.log('success')
+
     return result
   }
   console.log('no call of that name!')
@@ -119,8 +121,10 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
         buyToken: tokens[tokenOut].address,
         sellToken: tokens[tokenIn].address,
         feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
-        buyTokenPercentageFee: '0.02',
+        buyTokenPercentageFee: '0.00',
       }
+
+      console.log(_params)
 
       exact === 'out' ?
         _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
@@ -226,6 +230,14 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
         const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
 
         setBalanceOut(newBalanceOut)
+
+        let allowance
+
+        if (tokenIn === 'ETH') setRouterAllowance()
+        else {
+          allowance = await makeCall('allowance', '0x0000000000000000000000000000000000001010', [accountList[0], ROUTER_ADDRESS])
+          setRouterAllowance(allowance)
+        }
       }
 
       if (tokenOut && tokenOut !=='MATIC') {
@@ -233,6 +245,14 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
         const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
 
         setBalanceOut(newBalanceOut)
+
+        let allowance
+
+        if (tokenIn === 'ETH') setRouterAllowance()
+        else {
+          allowance = await makeCall('allowance', tempContractOut, [accountList[0], ROUTER_ADDRESS])
+          setRouterAllowance(allowance)
+        }
       }
     }
   }
@@ -307,8 +327,10 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
       sellToken: tokens[tokenIn].address,
       takerAddres: address,
       feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
-      buyTokenPercentageFee: '0.02',
+      buyTokenPercentageFee: '0.00',
     }
+
+    console.log(_params)
 
     exact === 'out' ?
       _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
@@ -318,6 +340,9 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
     if(slippageTolerance) _params.slippagePercentage = slippageTolerance
 
     try{
+
+      console.log(_params)
+
       const response = await fetch(
         `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(_params)}`,
       )
@@ -341,6 +366,9 @@ function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
           value: ethers.BigNumber.from(tokdata.value),
           from: address,
         }
+
+        console.log(tokdata)
+
         const result = await signer.sendTransaction(newTx, { gasPrice: utils.parseUnits(`${tokdata.gasPrice}`,9) }, { gasLimit: utils.parseUnits(`${tokdata.gas}`,9) })
 
         notification.open({

@@ -6,7 +6,11 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg",
-    "coingeckoId": "dai"
+    "coingeckoId": "dai",
+    "description": "Dai is a stable, decentralized currency that does not discriminate. Any individual or business can realize the advantages of digital money.",
+    "subdescription": "1 DAI token ≈ 1 USD",
+    "website": "https://makerdao.com/en/",
+    "poly": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
   },
     {
     "name": "MATIC",
@@ -15,7 +19,11 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/matic.svg",
-    "coingeckoId": "matic-network"
+    "coingeckoId": "matic-network",
+    "description": "MATIC is the native token of the Polygon POS protocol",
+    "subdescription": "Used to govern and secure the Polygon network and to pay network transaction fees.",
+    "website": "https://polygon.technology",
+    "poly": "0x0000000000000000000000000000000000001010"
   },
   {
     "name": "MCO2",
@@ -24,7 +32,11 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://i.imgur.com/ZcOLkHe.jpg",
-    "coingeckoId": "moss-carbon-credit"
+    "coingeckoId": "moss-carbon-credit",
+    "description": "Moss Certified CO2 Token.",
+    "subdescription": "Each token represents the offset of 1 CO2e ton.",
+    "website": "https://moss.earth/",
+    "poly": "0xAa7DbD1598251f856C12f63557A4C4397c253Cea"
   },
   {
     "address": "0x85955046DF4668e1DD369D2DE9f3AEB98DD2A369",
@@ -33,7 +45,11 @@
     "symbol": "DPI",
     "decimals": 18,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0x85955046DF4668e1DD369D2DE9f3AEB98DD2A369/logo.png",
-    "coingeckoId": "defipulse-index"
+    "coingeckoId": "defipulse-index",
+    "description": "DPI is a capitalization-weighted index that tracks the performance of top decentralized financial assets across the market.",
+    "subdescription": "The DPI Set is rebalanced monthly to realign to its market cap weighted index.",
+    "website": "https://www.defipulse.com",
+    "poly": "0x85955046DF4668e1DD369D2DE9f3AEB98DD2A369"
   },
   {
     "name": "USD Coin",
@@ -42,7 +58,11 @@
     "decimals": 6,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdc.jpg",
-    "coingeckoId": "usd-coin"
+    "coingeckoId": "usd-coin",
+    "description": "USD Coin is a digital stablecoin that is pegged to the United States dollar.",
+    "subdescription": "1 USDC = 1 USD",
+    "website": "https://www.centre.io/usdc",
+    "poly": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
   },
   {
     "name": "Tether USD",
@@ -51,7 +71,11 @@
     "decimals": 6,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdt.jpg",
-    "coingeckoId": "tether-usd-wormhole"
+    "coingeckoId": "tether-usd-wormhole",
+    "description": "Tether is a digital stable coin that is pegged to the United States Dollar",
+    "subdescription": "1 USDT ≈ 1 USD",
+    "website": "https://tether.to",
+    "poly": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
   },
   {
     "name": "Wrapped BTC",
@@ -60,7 +84,11 @@
     "decimals": 8,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/wbtc.svg",
-    "coingeckoId": "wrapped-bitcoin"
+    "coingeckoId": "wrapped-bitcoin",
+    "description": "Wrapped Bitcoin delivers the power of Bitcoin with the flexibility of an ERC20 token",
+    "subdescription": "1 WBTC = 1 BTC",
+    "website": "https://wbtc.network",
+    "poly": "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6"
   },
   {
     "name": "Wrapped Ether",
@@ -69,7 +97,11 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/weth.svg",
-    "coingeckoId": "weth"
+    "coingeckoId": "weth",
+    "description": "WETH allows you to trade for other ALT tokens",
+    "subdescription": "1 WETH = 1 ETH",
+    "website": "https://weth.io",
+    "poly": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"
   },
   {
     "name": "Wrapped Matic",
@@ -78,7 +110,11 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png",
-    "coingeckoId": "wmatic"
+    "coingeckoId": "wmatic",
+    "description": "Wrapping MATIC allows you to trade directly with other ALT tokens",
+    "subdescription": "1 WMATIC = 1 MATIC",
+    "website": "https://polygon.technology",
+    "poly": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
   },
   {
     "name": "Klima DAO",
@@ -87,7 +123,11 @@
     "decimals": 9,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0x4e78011Ce80ee02d2c3e649Fb657E45898257815/logo.png",
-    "coingeckoId": "klima-dao"
+    "coingeckoId": "klima-dao",
+    "description": "KLIMA is a vacuum for carbon. The treasury accepts certified emissions reductions from reputable carbon markets. These credits are sucked off the market and absorbed into the system through a Bonding mechanism.",
+    "subdescription": "1 KLIMA token = 1 Carbon Tonne from a certified carbon credit.",
+    "website": "https://www.klimadao.finance/",
+    "poly": "0x4e78011Ce80ee02d2c3e649Fb657E45898257815"
   },
   {
     "name": "Toucan Protocol: Base Carbon Tonne",
@@ -96,7 +136,11 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0x2F800Db0fdb5223b3C3f354886d907A671414A7F/logo.png",
-    "coingeckoId": "toucan-protocol-base-carbon-tonne"
+    "coingeckoId": "toucan-protocol-base-carbon-tonne",
+    "description": "Toucan credits bridged to blockchain on Polygon.",
+    "subdescription": "1 BCT = 1 Carbon Tonne from a Verra certified carbon credit",
+    "website": "https://toucan.earth/",
+    "poly": "0x2F800Db0fdb5223b3C3f354886d907A671414A7F"
   },
   {
     "name": "Nature Carbon Tonne",
@@ -105,6 +149,10 @@
     "decimals": 18,
     "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0xD838290e877E0188a4A44700463419ED96c16107/logo.png",
-    "coingeckoId": "toucan-protocol-nature-carbon-tonne"
+    "coingeckoId": "toucan-protocol-nature-carbon-tonne",
+    "description": "Toucan premium credits bridged to blockchain on Polygon.",
+    "subdescription": "1 NCT = 1 Carbon Tonne from a Verra certified nature-based credit.",
+    "website": "https://toucan.earth/",
+    "poly": "0xD838290e877E0188a4A44700463419ED96c16107"
   }
 ]

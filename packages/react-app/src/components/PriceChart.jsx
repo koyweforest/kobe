@@ -50,7 +50,7 @@ useEffect(() => {
   }
 }) */
 
-console.log(detail)
+// console.log(detail)
 
     useEffect(() => {
 
@@ -97,8 +97,8 @@ console.log(detail)
                   datasets: [{
                     fill: true,
                     label: `${detail?.name} price`,
-                    backgroundColor: '#90ee90',
-                    borderColor: '#5AC53B',
+                    backgroundColor: 'rgba(63,156,73, 0.09)',
+                    borderColor: '#3f9c49',
                     pointBackgroundColor: 'rgba(0,0,0,0)',
                     pointBorderColor: 'rgba(0, 0, 0, 0)',
                     pointHoverBackgroundColor: '#5AC53B',
