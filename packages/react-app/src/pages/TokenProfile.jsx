@@ -45,6 +45,7 @@ const TokenProfile = () => {
 
   const [activeTabKey1, setActiveTabKey1] = useState('Chart')
   const [activeTabKey2, setActiveTabKey2] = useState('app')
+  const [activeTabKey3, setActiveTabKey3] = useState('swap')
 
 const days = usePriceHistory(coinId.id, 1, 'min')
 const week = usePriceHistory(coinId.id, 14, 'hr')
@@ -62,12 +63,23 @@ const detail= useDetailHistory(coinId.id)
     key: 'Info',
     tab: 'Info',
   },
+  {
+    key: 'Swap',
+    tab: 'Swap',
+  },
 ]
 
 const contentListNoTitle = {
   Chart:
   <HistoryChart data={coinData} />,
   Info: <TokenDisplay data={coinData.detail} />,
+  Swap:
+    <><Swap
+      selectedProvider={injectedProvider}
+      tokenList={tokenList}
+      linkTokenOut={coinLink} /><CoinData data={coinData.detail} /></>,
+
+
 
 }
 
@@ -77,6 +89,10 @@ const onTab1Change = key => {
 
 const onTab2Change = key => {
   setActiveTabKey2(key)
+}
+
+const onTab3Change = key => {
+  setActiveTabKey3(key)
 }
 
   useEffect(() => {
@@ -124,7 +140,7 @@ return (
 
     <Row justify="space-around" className="mb-md">
 
-<div>
+
 <Card
         style={{
           width: '100%',
@@ -139,30 +155,8 @@ return (
         {contentListNoTitle[activeTabKey1]}
       </Card>
 
-</div>
 
 
-
-
-<Row>
-<div>
-
-
-  { !isLoadingAccount && address && injectedProvider &&
-      <Swap
-        selectedProvider={injectedProvider}
-        tokenList={tokenList}
-        linkTokenOut={coinLink}
-
-       />
- }
-
- <hr />
-<CoinData data={coinData.detail} />
-
-<hr />
-</div>
-</Row>
 
 
 </Row>

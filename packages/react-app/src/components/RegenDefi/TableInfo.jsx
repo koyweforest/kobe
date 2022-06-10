@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Image, Row, Table, Typography } from 'antd'
 import styled from 'styled-components'
@@ -14,7 +15,9 @@ const StyledTable = styled(Table)`
 
 export const TableInfo = ({ data, handleModalUp }) => {
 
+
   const columns = [
+
     {
       title: 'Token',
       dataIndex: 'token',
@@ -54,6 +57,7 @@ export const TableInfo = ({ data, handleModalUp }) => {
         </Row>
       ),
     },
+
     {
       title: 'Action',
       dataIndex: 'buy',
@@ -66,6 +70,9 @@ export const TableInfo = ({ data, handleModalUp }) => {
         $type="primary">{props.title}
       </StyledButton>
       :
+      props.symbol === 'sKLIMA'?
+      <StyledButton href={`${props.url}`} target="_blank" $type="primary">{props.title}</StyledButton> :
+
       <Link to={`/coins/${props.symbol}`} passHref>
         <a>
           <StyledButton src="icon/leave.svg" $type="primary">{props.title}</StyledButton>
