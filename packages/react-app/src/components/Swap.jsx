@@ -39,26 +39,22 @@ const erc20Abi = [
   'function approve(address _spender, uint256 _value) public returns (bool success)',
   'function allowance(address _owner, address _spender) public view returns (uint256 remaining)',
 ]
-
 const makeCall = async (callName, contract, args, metadata = {}) => {
   if (contract[callName]) {
     let result
 
-    if (args) result = await contract[callName](...args, metadata)
-    else result = await contract[callName]()
+     if (args) result = await contract[callName](...args, metadata)
+     else result = await contract[callName]()
 
-    return result
-  }
-  console.log('no call of that name!')
+     return result
+   }
+   console.log('no call of that name!')
 
   return undefined
 }
-
 const defaultToken = 'WETH'
-const defaultTokenOut = 'NCT'
 const defaultSlippage = '0.5'
 const defaultTimeLimit = 60 * 10
-
 const tokenListToObject = array =>
   array.reduce((obj, item) => {
     obj[item.symbol] = new Token(item.chainId, item.address, item.decimals, item.symbol, item.name)
@@ -66,7 +62,8 @@ const tokenListToObject = array =>
     return obj
   }, {})
 
-function Swap({ selectedProvider, tokenList, tx }) {
+function Swap({ selectedProvider, tokenList, tx, linkTokenOut }) {
+  const [defaultTokenOut, setDefaultTokenOut] = useState('NCT')
   const [tokenIn, setTokenIn] = useState(defaultToken)
   const [tokenOut, setTokenOut] = useState(defaultTokenOut)
   const [exact, setExact] = useState()
@@ -86,19 +83,13 @@ function Swap({ selectedProvider, tokenList, tx }) {
   const [settingsVisible, setSettingsVisible] = useState(false)
   const [swapModalVisible, setSwapModalVisible] = useState(false)
   const [rawPrice, setRawPrice] = useState()
-
   const [tokens, setTokens] = useState()
   const [invertPrice, setInvertPrice] = useState(false)
-
   const blockNumber = useBlockNumber(selectedProvider, 3000)
-
   const signer = selectedProvider.getSigner()
-
   const debouncedAmountIn = useDebounce(amountIn, 500)
   const debouncedAmountOut = useDebounce(amountOut, 500)
-
   const activeChainId = 137 // process.env.REACT_APP_NETWORK === 'kovan' ? ChainId.KOVAN : ChainId.MAINNET
-
   let notify
 
   useEffect(() => {
@@ -112,19 +103,22 @@ function Swap({ selectedProvider, tokenList, tx }) {
   }, [tokenList, activeChainId])
 
   const getTrades = async () => {
+
+  setTokenOut(linkTokenOut)
+
     if (tokenIn && tokenOut && (amountIn || amountOut)) {
-
-
       const _params = {
-        buyToken: tokens[tokenOut].address,
-        sellToken: tokens[tokenIn].address,
-        feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
-        buyTokenPercentageFee: '0.02',
-      }
+         buyToken: tokens[tokenOut].address,
+         sellToken: tokens[tokenIn].address,
+         feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
+         buyTokenPercentageFee:
+         tokenOut === 'MATIC' ? '0.00':
+         '0.02',
+       }
 
-      exact === 'out' ?
-        _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
-        :
+       exact === 'out' ?
+         _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
+         :
         _params.sellAmount = ethers.utils.parseUnits(`${amountIn}`,tokens[tokenIn].decimals).toString()
 
       if(slippageTolerance) _params.slippagePercentage = slippageTolerance
@@ -171,7 +165,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
     getTrades()
     // eslint-disable-next-line
   }, [tokenIn, tokenOut, debouncedAmountIn, debouncedAmountOut, slippageTolerance, selectedProvider])
-
   useEffect(() => {
     if (trades && trades[0])
       if (exact === 'in') setAmountOutMin(trades[0].minimumAmountOut(slippageTolerance))
@@ -186,7 +179,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
 
     return newBalance
   }
-
   const getAccountInfo = async () => {
     if (tokens) {
       const accountList = await selectedProvider.listAccounts()
@@ -221,21 +213,21 @@ function Swap({ selectedProvider, tokenList, tx }) {
         }
       }
 
-      if (tokenOut) {
-        const tempContractOut = new ethers.Contract(tokens[tokenOut].address, erc20Abi, selectedProvider)
-        const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
+      if (tokenOut === 'MATIC') {
+        const tempContractOut = new ethers.Contract('0x0000000000000000000000000000000000001010', erc20Abi, selectedProvider)
+         const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
 
-        setBalanceOut(newBalanceOut)
-      }
+         setBalanceOut(newBalanceOut)
+       }
 
-      if (tokenOut) {
-        const tempContractOut = new ethers.Contract(tokens[tokenOut].address, erc20Abi, selectedProvider)
-        const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
+       if (tokenOut && tokenOut !=='MATIC') {
+         const tempContractOut = new ethers.Contract(tokens[tokenOut].address, erc20Abi, selectedProvider)
+         const newBalanceOut = await getBalance(tokenOut, accountList[0], tempContractOut)
 
-        setBalanceOut(newBalanceOut)
-      }
-    }
-  }
+         setBalanceOut(newBalanceOut)
+       }
+     }
+   }
 
   usePoller(getAccountInfo, 6000)
 
@@ -246,7 +238,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
         })
       : []
     : []
-
   const updateRouterAllowance = async newAllowance => {
     setApproving(true)
 
@@ -265,15 +256,11 @@ function Swap({ selectedProvider, tokenList, tx }) {
       })
     }
   }
-
-
-
   const approveRouter = async () => {
     const approvalAmount =
       exact === 'in'
         ? ethers.utils.hexlify(ethers.utils.parseUnits(amountIn.toString(), tokens[tokenIn].decimals))
         : amountInMax.raw.toString()
-
     const approval = updateRouterAllowance(approvalAmount)
 
     notify = Notify(approval)
@@ -284,7 +271,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
         description: `You can now swap up to ${amountIn} ${tokenIn}`,
       })
   }
-
   const removeRouterAllowance = async () => {
     const approvalAmount = ethers.utils.hexlify(0)
     const removal = updateRouterAllowance(approvalAmount)
@@ -295,32 +281,32 @@ function Swap({ selectedProvider, tokenList, tx }) {
         description: `The router is no longer approved for ${tokenIn}`,
       })
   }
-
   const executeSwap = async () => {
     setSwapping(true)
 
     const accountList = await selectedProvider.listAccounts()
     const address = accountList[0]
-
     const _params = {
       buyToken: tokens[tokenOut].address,
-      sellToken: tokens[tokenIn].address,
-      takerAddres: address,
-      feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
-      buyTokenPercentageFee: '0.02',
-    }
+       sellToken: tokens[tokenIn].address,
+       takerAddres: address,
+       feeRecipient: '0x4218A70C7197CA24e171d5aB71Add06a48185f6a',
+       buyTokenPercentageFee:
+       tokenOut === 'MATIC' ? '0.00':
+       '0.02',
+     }
 
-    exact === 'out' ?
-      _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
-      :
+     exact === 'out' ?
+       _params.buyAmount = ethers.utils.parseUnits(`${amountOut}`,tokens[tokenOut].decimals).toString()
+       :
       _params.sellAmount = ethers.utils.parseUnits(`${amountIn}`,tokens[tokenIn].decimals).toString()
 
-    if(slippageTolerance) _params.slippagePercentage = slippageTolerance
+     if(slippageTolerance) _params.slippagePercentage = slippageTolerance
 
-    try{
-      const response = await fetch(
-        `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(_params)}`,
-      )
+     try{
+       const response = await fetch(
+         `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(_params)}`,
+       )
       const tokdata = await response.json()
 
       if(tokdata.code === 100) {
@@ -338,12 +324,12 @@ function Swap({ selectedProvider, tokenList, tx }) {
         const newTx = {
           to: ZERO_EX_ADDRESS,
           data: tokdata.data,
-          value: ethers.BigNumber.from(tokdata.value),
-          from: address,
-        }
-        const result = await signer.sendTransaction(newTx, { gasPrice: utils.parseUnits(`${tokdata.gasPrice}`,9) }, { gasLimit: utils.parseUnits(`${tokdata.gas}`,9) })
+           value: ethers.BigNumber.from(tokdata.value),
+           from: address,
+         }
+         const result = await signer.sendTransaction(newTx, { gasPrice: utils.parseUnits(`${tokdata.gasPrice}`,9) }, { gasLimit: utils.parseUnits(`${tokdata.gas}`,9) })
 
-        notification.open({
+         notification.open({
           message: 'Swap complete 🌳',
           description: (
             <>
@@ -363,20 +349,16 @@ function Swap({ selectedProvider, tokenList, tx }) {
       })
     }
   }
-
   const showSwapModal = () => {
     setSwapModalVisible(true)
   }
-
   const handleSwapModalOk = () => {
     setSwapModalVisible(false)
     executeSwap()
   }
-
   const handleSwapModalCancel = () => {
     setSwapModalVisible(false)
   }
-
   const insufficientBalance = balanceIn
     ? parseFloat(ethers.utils.formatUnits(balanceIn, tokens[tokenIn].decimals)) < amountIn
     : null
@@ -392,7 +374,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
   const formattedBalanceOut = balanceOut
     ? parseFloat(ethers.utils.formatUnits(balanceOut, tokens[tokenOut].decimals)).toPrecision(6)
     : null
-
   const metaIn =
     tokens && tokenList && tokenIn
       ? tokenList.filter(t => {
@@ -405,17 +386,14 @@ function Swap({ selectedProvider, tokenList, tx }) {
           return t.address === tokens[tokenOut].address
         })[0]
       : null
-
   const logoIn = metaIn ? metaIn.logoURI : 'https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/matic.svg'
   const logoOut = metaOut ? metaOut.logoURI : 'https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/icons/matic.svg'
-
   const price = rawPrice ? rawPrice : null
   const priceDescription = rawPrice
     ? invertPrice
       ? `${(1/rawPrice).toFixed(6)} ${tokenIn} per ${tokenOut}`
       : `${price} ${tokenOut} per ${tokenIn}`
     : null
-
   const priceWidget = (
     <Space>
       <Text type="secondary">{priceDescription}</Text>
@@ -429,7 +407,6 @@ function Swap({ selectedProvider, tokenList, tx }) {
       </Button>
     </Space>
   )
-
   const swapModal = (
     <Modal
       title="Confirm swap"

@@ -2,6 +2,9 @@
   text-align: center;
   padding-left: calc(100vw - 100%);
 }
+.swap_card {
+  height: 80%;
+}
 html {
   overflow-x:hidden;
   height: 100%;

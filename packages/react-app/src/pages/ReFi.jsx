@@ -98,12 +98,6 @@ useEffect(() => {
 
 return (
     <Row justify="center" className="mb-md">
-      {!isLoadingAccount && address && injectedProvider &&
-      <Swap
-        selectedProvider={injectedProvider}
-        tokenList={tokenList}
-      />
-      }
       {!isLoadingAccount && address && writeContracts && contracts && swapping &&
       <SwapModal
         setDetails={[currentSet]}

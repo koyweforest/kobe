@@ -60,7 +60,7 @@ export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
       token: {
         title: 'Clean Bitcoin',
         icon: 'icon/cbtc.png',
-        url: 'https://koywe.eco/',
+        url: 'https://www.tokensets.com/v2/set/polygon/0x7958E9fa5cf56aEBeDd820df4299E733f7E8e5Dd',
         symbol: 'CBTC',
       },
       position: `$${CBTCBalanceUSD.toFixed(2)}`,
@@ -82,7 +82,7 @@ export const createTableData = (USDPrices, walletBalance, indexUSDPrices) => {
       token: {
         title: 'Clean BED',
         icon: 'icon/bed.png',
-        url: 'https://koywe.eco/',
+        url: 'https://www.tokensets.com/v2/set/polygon/0x0765425b334D7DB1f374D03f4261aC191172BEF7',
         symbol: 'CNBED',
       },
       position: `$${CNBEDBalanceUSD.toFixed(2)}`,

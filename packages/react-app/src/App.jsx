@@ -16,6 +16,7 @@ import Pledge from './pages/Pledge'
 import Ranking from './pages/Ranking'
 import ReFi from './pages/ReFi'
 import RegenArt from './pages/RegenArt'
+import TokenProfile from './pages/TokenProfile'
 
 import 'antd/dist/antd.css'
 import './styles/index.css'
@@ -42,8 +43,11 @@ const App = () => {
               <Route exact path="/journey">
                 <Journey />
               </Route>
-              <Route path="/regen-defi">
+              <Route exact path="/regen-defi">
                 <ReFi />
+              </Route>
+              <Route path="/coins/:id">
+                <TokenProfile />
               </Route>
               <Route exact path="/debug">
                 <DebugPage />
@@ -51,14 +55,14 @@ const App = () => {
               <Route exact path="/emission">
                 <EmissionPage />
               </Route>
+              <Route exact path="/metrics">
+                <Metrics />
+              </Route>
               <Route exact path="/calculator">
                 <CalculatorPage />
               </Route>
               <Route exact path="/offsets">
                 <Offsets />
-              </Route>
-              <Route exact path="/metrics">
-                <Metrics />
               </Route>
             </Switch>
           </MainLayout>
