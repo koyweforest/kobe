@@ -18,16 +18,12 @@ const CoinData = ({ data }) => {
               <span>    {data.price_change_percentage_24h} %</span>
             </div>
           </div>
-
           <div>
             <div>
             </div>
             <hr />
-
           </div>
-
           <div className="col-sm">
-
             <div>
             <span>    Volume(24H):  </span>
               <span>${data.total_volume}</span>
