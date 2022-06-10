@@ -124,10 +124,10 @@ return (
 
     <Row justify="space-around" className="mb-md">
 
-
+<div>
 <Card
         style={{
-          width: '50%',
+          width: '100%',
         }}
 
         tabList={tabListNoTitle}
@@ -139,7 +139,7 @@ return (
         {contentListNoTitle[activeTabKey1]}
       </Card>
 
-
+</div>
 
 
 
