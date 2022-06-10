@@ -6,33 +6,20 @@ import sushiTokenList from '../sushiTL.json'
 
 const TokenDisplay = ({ data }) => {
 
-    const [asset, setAsset] = useState({})
+  const [asset, setAsset] = useState({})
+  const symbol = useParams()
 
-    const symbol = useParams()
+  useEffect(() => {
+    const GetAsset= async () => {
+      const _asset = sushiTokenList.find(token => {
+        return token.symbol === symbol.id
+      })
 
-    useEffect(() => {
-        const GetAsset= async () => {
-            {
-                const _asset = sushiTokenList.find(token => {
+      setAsset(_asset)
+    }
 
-                    return token.symbol === symbol.id
-                  })
-
-
-
-            setAsset(_asset)
-          }
-        }
-
-        GetAsset()
-      }, [symbol])
-
-
-
-
-
-
-
+    GetAsset()
+  }, [symbol])
 
   const renderData = () => {
     if (data && asset)
