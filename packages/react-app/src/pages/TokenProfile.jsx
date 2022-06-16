@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom/cjs/react-router-dom'
 import { Card, Row } from 'antd'
 
 import CoinData from '../components/CoinData'
+import ConnectButton from '../components/common/ConnectButton'
 import HistoryChart from '../components/PriceChart'
 import Swap from '../components/Swap'
 import TokenDisplay from '../components/TokenDisplay'
@@ -17,7 +18,7 @@ const TokenProfile = () => {
 
   const coinId = useParams()
 
-  const { injectedProvider } = useContext(NetworkContext)
+  const { address, injectedProvider } = useContext(NetworkContext)
 
 
   const [coinData, setCoinData] = useState({})
@@ -57,11 +58,12 @@ const TokenProfile = () => {
       <TokenDisplay data={coinData.detail} />,
     Swap:
       <>
-        <Swap
+        {!address && <ConnectButton />}
+        {address && <Swap
           selectedProvider={injectedProvider}
           tokenList={tokenList}
           linkTokenOut={coinLink}
-        />
+        />}
         <CoinData data={coinData.detail} />
       </>,
   }
