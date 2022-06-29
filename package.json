@@ -75,7 +75,8 @@
     "date-fns": "^2.28.0",
     "firebase": "^9.8.2",
     "moment": "^2.29.3",
-    "react-redux": "^7.2.7"
+    "react-redux": "^7.2.7",
+    "socket.io-client": "^2.4.0"
   },
   "devDependencies": {
     "chartjs-adapter-date-fns": "^2.0.0",

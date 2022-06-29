@@ -13,6 +13,7 @@ import Journey from './pages/Journey'
 import Metrics from './pages/metrics'
 import Offsets from './pages/Offsets'
 import Pledge from './pages/Pledge'
+import Portfolio from './pages/Portfolio'
 import Ranking from './pages/Ranking'
 import ReFi from './pages/ReFi'
 import RegenArt from './pages/RegenArt'
@@ -63,6 +64,10 @@ const App = () => {
               </Route>
               <Route exact path="/offsets">
                 <Offsets />
+              </Route>
+              <Route exact path="/portfolio">
+                <Portfolio />
+
               </Route>
             </Switch>
           </MainLayout>

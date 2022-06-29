@@ -67,6 +67,8 @@ useEffect(() => {
         }
       }
 
+      console.log(day)
+
 
 
         const chartStatus = Chart.getChart('mychart')
