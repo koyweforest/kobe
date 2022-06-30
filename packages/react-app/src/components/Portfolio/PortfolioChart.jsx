@@ -31,14 +31,14 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
     const PortfolioChart = ({ address, data }) => {
 
-        console.log(data)
+console.log(data)
 
         const [isRendered, setIsRendered] = useState(false)
         const [timeFormat, setTimeFormat] = useState('24h')
         const [mode, setMode] = useState(true)
 
         const chartRef = useRef()
-        const { detail } = data
+        const { hours, days, weeks, months, years } = data
 
         const onChange = e => {
           console.log(`checked = ${e.target.checked}`)
@@ -58,7 +58,22 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
         useEffect(() => {
 
-
+          const determineTimeFormat = () => {
+            switch (timeFormat) {
+              case 'h':
+                return hours
+              case 'd':
+                return days
+              case 'w':
+                return weeks
+              case 'm':
+                return months
+              case 'y':
+                return years
+              default:
+                return days
+            }
+          }
 
 
             const chartStatus = Chart.getChart('mychart')
@@ -73,7 +88,7 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
                 chartStatus.destroy()
                 setIsRendered(false)
-    } else (!isRendered && chartStatus && detail)
+    } else (!isRendered && chartStatus)
 
 
 
@@ -98,7 +113,7 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
                         pointHoverBorderWidth: 4,
                         pointHoverRadius: 6,
 
-                          data,
+                          data: determineTimeFormat(),
                           pointRadius: 0,
                           borderWidth: 2,
                       }],
@@ -152,7 +167,7 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
                             {
                               type: 'time',
                               time: {
-                                format: 'MM/DD/YYYY hh mm ss a',
+                                format: 'MM/DD/YYYY hh mm',
                               },
                               ticks: {
                                 display: false,
@@ -168,9 +183,10 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
                 setIsRendered(true)
         };
-    },[data, detail, isRendered])
+    },[data, days, hours, weeks, months, years, isRendered, timeFormat])
 
-    const renderPrice = () => {
+  /*  const renderPrice = () => {
+
       if (detail)
         return (
           <>
@@ -201,15 +217,13 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
     }
 
-
+*/
 
     return(
 
 
         <div className='bg-white border mt-2 rounded p-3'>
-    <div>{renderDetail()}</div>
 
-        <div>{renderPrice()}</div>
 
         <div>
             <canvas ref={chartRef} id='mychart' width={800} height={500} ></canvas>
@@ -219,22 +233,34 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
         <div className="chart-button mt-1">
             <button
-              onClick={() => setTimeFormat('24h')}
+              onClick={() => setTimeFormat('h')}
               className="btn btn-outline-secondary btn-sm"
             >
-              24h
+              Hr
             </button>
             <button
-              onClick={() => setTimeFormat('7d')}
+              onClick={() => setTimeFormat('d')}
               className="btn btn-outline-secondary btn-sm mx-1"
             >
-              14d
+              D
             </button>
             <button
-              onClick={() => setTimeFormat('1y')}
+              onClick={() => setTimeFormat('w')}
               className="btn btn-outline-secondary btn-sm"
             >
-              1y
+              Wk
+            </button>
+            <button
+              onClick={() => setTimeFormat('m')}
+              className="btn btn-outline-secondary btn-sm"
+            >
+              M
+            </button>
+            <button
+              onClick={() => setTimeFormat('y')}
+              className="btn btn-outline-secondary btn-sm"
+            >
+              Yr
             </button>
           </div>
         </div>

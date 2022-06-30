@@ -1,12 +1,20 @@
-import React, { useContext, useState } from 'react'
+/* eslint-disable max-lines-per-function */
+import React, { useContext, useEffect, useState } from 'react'
 
 import PortfolioChart from '../components/Portfolio/PortfolioChart'
 import PortfolioOverfiew from '../components/Portfolio/PortfolioOverview'
+import PortfolioTransactions from '../components/Portfolio/PortfolioTransactions'
 import { NetworkContext } from '../contexts/NetworkContext'
 
 const Portfolio = () => {
     const [infoResponse, SetinfoResponse] = useState('')
     const [chartsResponse, SetChartsResponse] = useState('')
+    const [txResponse, SetTxResponse] = useState('')
+    const [coinData, setCoinData] = useState({})
+
+
+
+    const [timeResponse, setTimeResponse] = useState({})
 
     const { address } = useContext(NetworkContext)
 
@@ -31,6 +39,8 @@ const Portfolio = () => {
         },
       }),
     }
+
+    useEffect(() => {
 
     function get(socketNamespace, requestBody) {
       return new Promise(resolve => {
@@ -63,40 +73,85 @@ const Portfolio = () => {
         portfolio_fields: 'all',
       },
     }).then(response => {
-        console.log(response?.payload.portfolio)
+      //  console.log(response?.payload.portfolio)
       SetinfoResponse(response?.payload.portfolio)
     })
 
-
-
-    const chart_response = get(addressSocket, {
-        scope: ['charts'],
-        payload: {
-          address: address?.toLowerCase(),
-          currency: 'usd',
-        },
-      }).then(response => {
-        console.log(formatData(response?.payload.charts.others))
-        SetChartsResponse(formatData(response?.payload.charts.others))
-      })
-
-      const formatData = data => {
+    const formatData = data => {
         return data?.map(el => {
           return {
-            x: el[0],
+            x: el[0]*1000,
             y: el[1].toFixed(2),
           }
         })
       }
+
+
+    const chart_response = interval => get(addressSocket, {
+        scope: ['charts'],
+        payload: {
+          address: address?.toLowerCase(),
+          currency: 'usd',
+          charts_type: `${interval}`,
+        },
+      }).then(response => {
+          return formatData(response?.payload.charts.others)
+      })
+
+
+      const GetCoinData = async () => {
+
+        setCoinData({
+            hours: await (chart_response('h')),
+            days: await (chart_response('d')),
+            weeks: await (chart_response('w')),
+            months: await (chart_response('m')),
+            years: await (chart_response('y')),
+        })
+
+    }
+
+    GetCoinData()
+
+
+
+
+
 /* */
+
+const tx_response = get(addressSocket, {
+    scope: ['transactions'],
+    payload: {
+      address: address?.toLowerCase(),
+      currency: 'usd',
+    },
+  }).then(response => {
+      // console.log(('txns', response?.payload))
+    SetTxResponse((response?.payload.transactions))
+  })
+}, [address])
+
+
+
+console.log(coinData)
+
 
 
 
     return (
         <div>
-            {address}
-            <PortfolioOverfiew address={address} info={infoResponse} />
-            <PortfolioChart address={address} data={chartsResponse} />
+            {address &&
+            <PortfolioOverfiew address={address} info={infoResponse}
+            />}
+            {coinData &&
+            <PortfolioChart address={address} data={coinData}
+            />
+}
+            {txResponse &&
+            <PortfolioTransactions address={address} tx={txResponse}
+            />}
+
+
 
         </div>
         )
