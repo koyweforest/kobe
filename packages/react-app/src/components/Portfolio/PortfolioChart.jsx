@@ -4,6 +4,7 @@ import 'chartjs-adapter-date-fns'
 
 import React, { useEffect,useRef, useState  } from 'react'
 import { Line } from 'react-chartjs-2'
+import { Box, Button } from '@chakra-ui/react'
 import { Checkbox,Input,Typography } from 'antd'
 import {
     BarController,
@@ -219,7 +220,7 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
 */
 
-    return(
+    return(<Box>
 
 
         <div className='bg-white border mt-2 rounded p-3'>
@@ -232,38 +233,39 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
 
         <div className="chart-button mt-1">
-            <button
+            <Button
               onClick={() => setTimeFormat('h')}
               className="btn btn-outline-secondary btn-sm"
             >
               Hr
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setTimeFormat('d')}
               className="btn btn-outline-secondary btn-sm mx-1"
             >
               D
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setTimeFormat('w')}
               className="btn btn-outline-secondary btn-sm"
             >
               Wk
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setTimeFormat('m')}
               className="btn btn-outline-secondary btn-sm"
             >
               M
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setTimeFormat('y')}
               className="btn btn-outline-secondary btn-sm"
             >
               Yr
-            </button>
+            </Button>
           </div>
         </div>
+        </Box>
     )
     }
 

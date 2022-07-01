@@ -1,11 +1,24 @@
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react'
+import { Route, Switch } from 'react-router-dom'
+import {
+  Table,
+  TableCaption,
+  TableContainer,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react'
 
 import PortfolioAssets from '../components/Portfolio/PortfolioAssets'
 import PortfolioChart from '../components/Portfolio/PortfolioChart'
 import PortfolioOverfiew from '../components/Portfolio/PortfolioOverview'
 import PortfolioTransactions from '../components/Portfolio/PortfolioTransactions'
 import { NetworkContext } from '../contexts/NetworkContext'
+import PortfolioFullTransactions from '../pages/PortfolioFullHistory'
 
 const Portfolio = () => {
     const [infoResponse, SetinfoResponse] = useState('')
@@ -170,11 +183,16 @@ console.log(assetResponse)
 }
             {txResponse &&
             <PortfolioTransactions address={address} tx={txResponse}
-            />}
+            />
+
+              }
 
             {assetResponse &&
             <PortfolioAssets address={address} asset={assetResponse}
             />}
+
+
+
 
 
 
