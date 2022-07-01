@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { HashRouter } from 'react-router-dom'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeProvider } from 'styled-components'
 
 import { NetworkContextProvider } from './contexts/NetworkContext'
@@ -16,6 +17,7 @@ const client = new ApolloClient({
 })
 
 ReactDOM.render(
+<ChakraProvider>
   <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
       <HashRouter>
@@ -24,6 +26,7 @@ ReactDOM.render(
         </NetworkContextProvider>
       </HashRouter>
     </ThemeProvider>
-  </ApolloProvider>,
+  </ApolloProvider>
+  </ChakraProvider>,
   document.getElementById('root'),
 )

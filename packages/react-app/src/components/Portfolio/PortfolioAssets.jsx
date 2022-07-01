@@ -1,4 +1,18 @@
 import { useState } from 'react'
+import {
+  ChakraProvider,
+  LinkBox,
+  LinkOverlay,
+  Table,
+  TableCaption,
+  TableContainer,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react'
 import { Image, List } from 'antd'
 import { format } from 'date-fns'
 
@@ -35,21 +49,44 @@ console.log(asset)
 
 
 
-return <div>
+return <ChakraProvider>
 
+<TableContainer margin='auto'>
+  <Table variant='simple'  color="whatsapp" size='lg' >
+    <TableCaption placement='top'>Assets</TableCaption>
+    <Thead>
+    <Tr >
+        <Th>Asset</Th>
+        <Th>Price</Th>
+        <Th>Balance</Th>
+        <Th>Value</Th>
+        </Tr>
+     </Thead>
+    <Tbody>
 
     {asset && asset.map(thing => (
 
-        <List key={thing}>
-          { thing.asset.icon_url && <Image height={45} width={45} src={thing.asset.icon_url} /> } {!thing.asset.icon_url && <Image height={45} width={45} src={''} />} || Token Symbol: {thing.asset.symbol} || Token Name: {thing.asset.name} || ValueUSD: ${(thing.value).toFixed(2)} || Coin Price: ${(thing.asset.price.value).toFixed(2)} || #ofCoins: {((thing.quantity)/(10**thing.asset.decimals)).toFixed(2)}
+        <LinkBox key={thing} as={Tr} _hover={{
+          background: 'gray.400',
+          color: 'white',
+        }}>
+        <Td>{ thing.asset.icon_url && <Image height={25} width={25} src={thing.asset.icon_url} /> } {!thing.asset.icon_url && <Image height={25} width={25} src={''} />} {thing.asset.name}</Td>
+        <Td>${(thing.asset.price.value).toFixed(2)}</Td>
+        <Td>{((thing.quantity)/(10**thing.asset.decimals)).toFixed(4)}  {thing.asset.symbol}</Td>
+        <Td>${(thing.value).toFixed(2)}</Td>
 
-        </List>
+        <LinkOverlay href={`#/coins/${thing.asset.symbol}`} _hover={{ color: 'blue', stroke: 'blue' }}></LinkOverlay>
+        </LinkBox>
 
-    ))}
-    <hr></hr>
+        ))}
+
+    </Tbody>
+  </Table>
+</TableContainer>
 
 
-</div>
+
+</ChakraProvider>
 
 
 
