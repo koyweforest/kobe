@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react'
 
+import PortfolioAssets from '../components/Portfolio/PortfolioAssets'
 import PortfolioChart from '../components/Portfolio/PortfolioChart'
 import PortfolioOverfiew from '../components/Portfolio/PortfolioOverview'
 import PortfolioTransactions from '../components/Portfolio/PortfolioTransactions'
@@ -11,6 +12,7 @@ const Portfolio = () => {
     const [chartsResponse, SetChartsResponse] = useState('')
     const [txResponse, SetTxResponse] = useState('')
     const [coinData, setCoinData] = useState({})
+    const [assetResponse, SetAssetResponse] = useState('')
 
 
 
@@ -39,6 +41,17 @@ const Portfolio = () => {
         },
       }),
     }
+
+    const assetSocket = {
+        namespace: 'asset',
+        socket: io(`${BASE_URL}asset`, {
+          transports: ['websocket'],
+          timeout: 60000,
+          query: {
+            api_token: 'Koywe.GynkRjhNDcaaC5u1b5GgnkONbvbKCV9v',
+          },
+        }),
+      }
 
     useEffect(() => {
 
@@ -114,11 +127,6 @@ const Portfolio = () => {
     GetCoinData()
 
 
-
-
-
-/* */
-
 const tx_response = get(addressSocket, {
     scope: ['transactions'],
     payload: {
@@ -129,11 +137,24 @@ const tx_response = get(addressSocket, {
       // console.log(('txns', response?.payload))
     SetTxResponse((response?.payload.transactions))
   })
+
+  const asset_response = get(addressSocket, {
+    scope: ['positions'],
+    payload: {
+      address: address?.toLowerCase(),
+      currency: 'usd',
+    },
+  }).then(response => {
+      // console.log(('txns', response?.payload))
+    SetAssetResponse((response?.payload.positions.positions))
+  })
 }, [address])
 
 
 
-console.log(coinData)
+
+
+console.log(assetResponse)
 
 
 
@@ -149,6 +170,10 @@ console.log(coinData)
 }
             {txResponse &&
             <PortfolioTransactions address={address} tx={txResponse}
+            />}
+
+            {assetResponse &&
+            <PortfolioAssets address={address} asset={assetResponse}
             />}
 
 

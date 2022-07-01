@@ -29,7 +29,7 @@ const { Title: TypoTitle } = Typography
 
 const HistoryChart = ({ data }) => {
 
-  console.log(data)
+
 
     const [isRendered, setIsRendered] = useState(false)
     const [timeFormat, setTimeFormat] = useState('24h')

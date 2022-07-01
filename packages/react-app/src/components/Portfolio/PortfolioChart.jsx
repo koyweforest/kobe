@@ -31,7 +31,7 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
     const PortfolioChart = ({ address, data }) => {
 
-console.log(data)
+
 
         const [isRendered, setIsRendered] = useState(false)
         const [timeFormat, setTimeFormat] = useState('24h')

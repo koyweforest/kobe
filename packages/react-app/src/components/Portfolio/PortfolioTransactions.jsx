@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { List } from 'antd'
 import { format } from 'date-fns'
-import { useUserProviderAndSigner } from 'eth-hooks'
-import { ethers, getDefaultProvider, getInjectedProvider, providers } from 'ethers'
 
-import Blockie from '../Blockie'
 
-const provider = ethers.getDefaultProvider()
+
+
+
+
 
 
 
@@ -14,19 +14,19 @@ export default function PortfolioTransactions({ address, tx }) {
 
 const [result, setResult] = useState('')
 
-    console.log(tx)
+  //  console.log(tx)
 
 const yeet = tx?.map(console => (
     console?.changes
 ))
 
-console.log(yeet)
+// console.log(yeet)
 
 const yeet_deeper = tx?.map((console, i) => (
     (console?.changes[0]?.value)/10**18
 ))
 
-console.log(yeet_deeper)
+// console.log(yeet_deeper)
 
 
 
