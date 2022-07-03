@@ -220,9 +220,9 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
 
 */
 
-    return(<Box>
+    return(<Box className='yetturi'>
 
-
+{data && isRendered &&
         <div className='bg-white border mt-2 rounded p-3'>
 
 
@@ -265,6 +265,7 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, ChartTitl
             </Button>
           </div>
         </div>
+    }
         </Box>
     )
     }

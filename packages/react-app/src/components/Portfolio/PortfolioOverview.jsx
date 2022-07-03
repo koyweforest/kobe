@@ -14,9 +14,9 @@ return <Box padding={10} width={'max-content'} textAlign={'right'}>
         {`${address}`.substring(0,6)}...{`${address}`.substring(38)}<Button onClick={onCopy} ml={2}>
           {hasCopied ? 'Copied' : '⎘'}
         </Button></Heading>
-    <hr></hr>
+
     <Heading>${(info?.total_value)?.toFixed(2)}</Heading>
-    <hr></hr>
+
     <Text>{(info?.relative_change_24h)?.toFixed(2)}% (${info?.absolute_change_24h?.toFixed(2)})</Text>
 
 </Box>

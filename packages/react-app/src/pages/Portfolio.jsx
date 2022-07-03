@@ -1,7 +1,9 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import {
+  Box,
   Table,
   TableCaption,
   TableContainer,
@@ -12,6 +14,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
+import { Card, Row } from 'antd'
 
 import PortfolioAssets from '../components/Portfolio/PortfolioAssets'
 import PortfolioChart from '../components/Portfolio/PortfolioChart'
@@ -27,7 +30,39 @@ const Portfolio = () => {
     const [coinData, setCoinData] = useState({})
     const [assetResponse, SetAssetResponse] = useState('')
 
+    const [activeTabKey1, setActiveTabKey1] = useState('Chart')
+    const [activeTabKey2, setActiveTabKey2] = useState('History')
 
+    const tabListNoTitle = [
+      {
+        key: 'Chart',
+        tab: 'Chart',
+      },
+      {
+        key: 'History',
+        tab: 'History',
+      },
+      /* {
+        key: 'Swap',
+        tab: 'Swap',
+      }, */
+    ]
+
+
+    const onTab1Change = key => {
+      setActiveTabKey1(key)
+    }
+
+    const onTab2Change = key => {
+      setActiveTabKey2(key)
+    }
+
+    /*
+    const onTab3Change = key => {
+      setActiveTabKey3(key)
+    }
+
+*/
 
     const [timeResponse, setTimeResponse] = useState({})
 
@@ -145,6 +180,7 @@ const tx_response = get(addressSocket, {
     payload: {
       address: address?.toLowerCase(),
       currency: 'usd',
+      asset_types: 'Polygon',
     },
   }).then(response => {
       // console.log(('txns', response?.payload))
@@ -167,25 +203,52 @@ const tx_response = get(addressSocket, {
 
 
 
-console.log(assetResponse)
+console.log(txResponse)
+
+const contentListNoTitle = {
+  Chart:
+
+<Box display={'inline-flex'}>
+    <Box  className='yeetchart' float={'left'}>
+  <PortfolioChart address={address} data={coinData}
+  />
+    </Box>
+<Box marginLeft={'3%'}>  <PortfolioTransactions address={address} tx={txResponse}
+  /></Box>
+    </Box>
+,
+  History:
+  <PortfolioFullTransactions address={address} tx={txResponse} asset={assetResponse}/>,
+  Swap:
+    <>
+    </>,
+}
 
 
 
 
     return (
         <div>
+
+
             {address &&
             <PortfolioOverfiew address={address} info={infoResponse}
             />}
-            {coinData &&
-            <PortfolioChart address={address} data={coinData}
-            />
-}
-            {txResponse &&
-            <PortfolioTransactions address={address} tx={txResponse}
-            />
 
-              }
+<Card
+      style={{
+        width: '100%',
+        textAlign: 'center',
+      }}
+
+      tabList={tabListNoTitle}
+      activeTabKey={activeTabKey1}
+      onTabChange={key => {
+        onTab1Change(key)
+      }}
+    >
+      {contentListNoTitle[activeTabKey1]}
+    </Card>
 
             {assetResponse &&
             <PortfolioAssets address={address} asset={assetResponse}

@@ -19,16 +19,6 @@ const [result, setResult] = useState('')
 
   //  console.log(tx)
 
-const yeet = tx?.map(console => (
-    console?.changes
-))
-
-// console.log(yeet)
-
-const yeet_deeper = tx?.map((console, i) => (
-    (console?.changes[0]?.value)/10**18
-))
-
 // console.log(yeet_deeper)
 
 const capitalizeFirst = str => {
@@ -37,7 +27,10 @@ const capitalizeFirst = str => {
 
 
 
-return <Box alignItems={'center'} justifyContent={'center'} float={'right'} border={'4px solid'} width={'max-content'}>
+return <Box width={'max-content'} padding={'5px'}>
+
+{tx &&
+  <>
 <Center>
 <Heading>History</Heading>
 </Center>
@@ -45,7 +38,7 @@ return <Box alignItems={'center'} justifyContent={'center'} float={'right'} bord
     {tx && tx.slice(0,5).map(thing => (
 
 
-<List padding={3} key={thing.id}>
+<List textAlign={'left'} padding={3} key={thing.id}>
 <ListItem>
     {thing?.changes[0]?.asset.icon_url &&
     <ListIcon as={Image} src={`${thing?.changes[0]?.asset.icon_url}`}/>
@@ -61,20 +54,13 @@ return <Box alignItems={'center'} justifyContent={'center'} float={'right'} bord
 
 
     ))}
+</>
+}
 
-<hr></hr>
-<Box padding={5}>
-<Center>
-<Button width={'75%'}>
-    <Link href={'#/portfolio/history'}>
-        See All
-    </Link>
-</Button>
-</Center>
-</Box>
 
 
     </Box>
+
 
 
 
