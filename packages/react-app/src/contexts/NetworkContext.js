@@ -7,7 +7,7 @@ import { useStaticJsonRPC } from '../hooks'
 
 const { ethers } = require('ethers')
 
-const USE_BURNER_WALLET = false
+const USE_BURNER_WALLET = true
 
 const providers = [
   'https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406',
@@ -58,7 +58,7 @@ export const NetworkContextProvider = ({ children }) => {
 
     if (injectedProvider && injectedProvider.provider && typeof injectedProvider.provider.disconnect === 'function')
       await injectedProvider.provider.disconnect()
-
+      await localProvider
 
     setTimeout(() => {
       window.location.reload()
