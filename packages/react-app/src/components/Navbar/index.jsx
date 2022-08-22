@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { PropertySafetyFilled } from '@ant-design/icons'
 import { Col, Menu, Row } from 'antd'
 import styled from 'styled-components'
 
@@ -24,7 +25,7 @@ const Index = ({ navbarRef, NETWORKCHECK }) => {
   const router = useHistory()
   const [path, setPath] = useState(router.pathname)
   const { isPledged } = useContext(WalletContext)
-  const { disconnectWallet, userSigner } = useContext(NetworkContext)
+  const { disconnectWallet, userSigner, mainnetProvider, address, connectToWallet, web3Modal, injectedProvider } = useContext(NetworkContext)
 
   useEffect(() => {
     setPath(router.pathname)
@@ -33,6 +34,8 @@ const Index = ({ navbarRef, NETWORKCHECK }) => {
   const handleMenu = url => {
     router.push(url)
   }
+
+
 
   return (
     <Row ref={navbarRef} className="menu-row" justify="space-between">
@@ -60,14 +63,21 @@ const Index = ({ navbarRef, NETWORKCHECK }) => {
           <Col>
             <Balance />
           </Col>
-          <Col>
-            <Wallet isPledged={isPledged} />
+          <Col >
+            <Wallet isPledged={isPledged} provider={userSigner} address={address} ensProvider={mainnetProvider}  />
           </Col>
           {userSigner && (
             <Col>
-              <StyledButton $type="secondary" onClick={disconnectWallet} style={{ marginTop: 1.6 }}>
-                Logout
-              </StyledButton>
+            {injectedProvider ? (
+      <StyledButton $type="secondary" onClick={() => disconnectWallet()} style={{ marginTop: 1.6 }}>
+      Logout
+    </StyledButton>
+  ) : (
+<StyledButton $type="secondary" style={{ marginTop: '4px' }} onClick={() => connectToWallet()}>
+    Connect
+  </StyledButton>
+  )}
+
             </Col>
           )}
         </Row>
@@ -80,3 +90,4 @@ const Index = ({ navbarRef, NETWORKCHECK }) => {
 }
 
 export default Index
+
